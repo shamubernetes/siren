@@ -33,4 +33,3 @@ export function AlertStateBadge({ alert }: AlertStateBadgeProps) {
     </Badge>
   )
 }
-

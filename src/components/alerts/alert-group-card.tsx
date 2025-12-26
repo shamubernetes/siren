@@ -113,4 +113,3 @@ function AlertRow({ alert, nowMs }: AlertRowProps) {
     </TableRow>
   )
 }
-

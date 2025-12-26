@@ -1,9 +1,12 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { fetchAlertmanagerAlerts } from '@/lib/alertmanager/alertmanager-client'
 import { AlertsDashboard } from '@/components/alerts/alerts-dashboard'
 import { Skeleton } from '@/components/ui/skeleton'
+
+const REFRESH_INTERVAL_STORAGE_KEY = 'alerts-refresh-interval'
+const DEFAULT_REFRESH_INTERVAL = 30_000
 
 export const Route = createFileRoute('/alerts')({
   loader: async () => {
@@ -55,25 +58,61 @@ function AlertsRoute() {
   const router = useRouter()
   const { alerts, nowMs } = Route.useLoaderData()
 
+  const [refreshInterval, setRefreshInterval] = useState<number | null>(() => {
+    if (typeof globalThis === 'undefined') {
+      return DEFAULT_REFRESH_INTERVAL
+    }
+    const stored = localStorage.getItem(REFRESH_INTERVAL_STORAGE_KEY)
+    if (stored === null) {
+      return DEFAULT_REFRESH_INTERVAL
+    }
+    if (stored === 'null') {
+      return null
+    }
+    const parsed = Number.parseInt(stored, 10)
+    return Number.isNaN(parsed) ? DEFAULT_REFRESH_INTERVAL : parsed
+  })
+
   const handleRefresh = useCallback(() => {
     void router.invalidate()
   }, [router])
 
+  const handleRefreshIntervalChange = useCallback((interval: number | null) => {
+    setRefreshInterval(interval)
+    if (typeof globalThis !== 'undefined') {
+      if (interval === null) {
+        localStorage.setItem(REFRESH_INTERVAL_STORAGE_KEY, 'null')
+      } else {
+        localStorage.setItem(REFRESH_INTERVAL_STORAGE_KEY, String(interval))
+      }
+    }
+  }, [])
+
   useEffect(() => {
+    if (refreshInterval === null) {
+      return
+    }
+
     const intervalId = globalThis.setInterval(() => {
       if (document.visibilityState !== 'visible') {
         return
       }
 
       void router.invalidate()
-    }, 30_000)
+    }, refreshInterval)
 
     return () => {
       globalThis.clearInterval(intervalId)
     }
-  }, [router])
+  }, [router, refreshInterval])
 
   return (
-    <AlertsDashboard alerts={alerts} nowMs={nowMs} onRefresh={handleRefresh} />
+    <AlertsDashboard
+      alerts={alerts}
+      nowMs={nowMs}
+      onRefresh={handleRefresh}
+      refreshInterval={refreshInterval}
+      onRefreshIntervalChange={handleRefreshIntervalChange}
+    />
   )
 }

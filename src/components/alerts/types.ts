@@ -6,6 +6,8 @@ export type AlertsDashboardProps = {
   alerts: Array<AlertmanagerAlert>
   nowMs: number
   onRefresh: () => void
+  refreshInterval: number | null
+  onRefreshIntervalChange: (interval: number | null) => void
 }
 
 export type AlertCounts = {
@@ -26,4 +28,3 @@ export type WatchdogStatus = {
   statusBadgeClassName: string
   statusLabel: string
 }
-

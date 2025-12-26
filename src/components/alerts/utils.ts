@@ -218,4 +218,3 @@ export function getInterestingLabelBadges(alert: AlertmanagerAlert) {
 
   return badges
 }
-

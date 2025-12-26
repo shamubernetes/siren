@@ -18,10 +18,7 @@ export function WatchdogStatus({ status, nowMs }: WatchdogStatusProps) {
           <span className="text-xs font-medium text-muted-foreground">
             Watchdog
           </span>
-          <Badge
-            variant="outline"
-            className={status.statusBadgeClassName}
-          >
+          <Badge variant="outline" className={status.statusBadgeClassName}>
             {status.statusLabel}
           </Badge>
           <span className="truncate text-xs text-muted-foreground">
@@ -42,4 +39,3 @@ export function WatchdogStatus({ status, nowMs }: WatchdogStatusProps) {
     </footer>
   )
 }
-
