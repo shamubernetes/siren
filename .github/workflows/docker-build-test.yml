@@ -7,24 +7,32 @@ on:
   workflow_call:
 
 jobs:
-  build-test:
-    name: Build and test Docker image
+  load-matrix:
+    name: Load platform matrix
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
-
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Set matrix
+        id: set-matrix
+        run: echo "matrix=$(cat .github/docker-platforms.json)" >> $GITHUB_OUTPUT
+
+  build-test:
+    name: Build and test Docker image
+    needs: load-matrix
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.load-matrix.outputs.matrix) }}
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -36,14 +44,12 @@ jobs:
           context: .
           push: false
           platforms: ${{ matrix.platform }}
-          # Only load the amd64 image so we can run it on the default GitHub runner.
-          load: ${{ matrix.platform == 'linux/amd64' }}
+          load: true
           tags: siren-pr-test:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Smoke test container
-        if: matrix.platform == 'linux/amd64'
         run: |
           docker run -d -p 3000:3000 --name siren-smoke siren-pr-test:latest
           sleep 5
