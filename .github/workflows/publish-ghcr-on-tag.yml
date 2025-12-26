@@ -26,7 +26,7 @@ jobs:
 
       - name: Set matrix
         id: set-matrix
-        run: echo "matrix=$(cat .github/docker-platforms.json)" >> $GITHUB_OUTPUT
+        run: echo "matrix=$(jq -c . .github/docker-platforms.json)" >> $GITHUB_OUTPUT
 
   build-push:
     name: Build and push Docker image (per-platform)
