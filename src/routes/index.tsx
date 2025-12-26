@@ -1,10 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { ComponentExample } from "@/components/component-example";
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
-export const Route = createFileRoute("/")({ component: App });
+export const Route = createFileRoute('/')({
+  beforeLoad: () => {
+    throw redirect({
+      to: '/alerts',
+    })
+  },
+  component: IndexRedirect,
+})
 
-function App() {
-return (
-  <ComponentExample />
-);
+function IndexRedirect() {
+  return null
 }
