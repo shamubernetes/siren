@@ -1,9 +1,6 @@
 name: Release (semantic-release)
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
@@ -14,52 +11,18 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  pr-build-test:
-    name: Build and test Docker image (PR)
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
-          - linux/arm64
+  lint-and-check:
+    uses: ./.github/workflows/ci.yml
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Docker image (no push)
-        id: build
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: false
-          platforms: ${{ matrix.platform }}
-          # Only load the amd64 image so we can run it on the default GitHub runner.
-          load: ${{ matrix.platform == 'linux/amd64' }}
-          tags: siren-pr-test:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Smoke test container
-        if: matrix.platform == 'linux/amd64'
-        run: |
-          docker run -d -p 3000:3000 --name siren-smoke siren-pr-test:latest
-          sleep 5
-          curl --retry 3 --retry-delay 2 --max-time 10 http://localhost:3000/ || exit 1
-          docker stop siren-smoke
-          docker rm siren-smoke
+  docker-build-test:
+    uses: ./.github/workflows/docker-build-test.yml
 
   release-prepare:
     name: Release (semantic-release)
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - lint-and-check
+      - docker-build-test
     permissions:
       contents: write
 
@@ -68,6 +31,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
