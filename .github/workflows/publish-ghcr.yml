@@ -1,0 +1,145 @@
+name: Publish to GHCR
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  pr-build-test:
+    name: Build and test Docker image (PR)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image (no push)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: siren-pr-test:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke test container
+        run: |
+          docker run -d -p 3000:3000 --name siren-smoke siren-pr-test:latest
+          sleep 5
+          curl --retry 3 --retry-delay 2 --max-time 10 http://localhost:3000/ || exit 1
+          docker stop siren-smoke
+          docker rm siren-smoke
+
+  release-build-push:
+    name: Release and push Docker image
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Get current version
+        id: version-before
+        run: |
+          VERSION=$(bun run -e "console.log(require('./package.json').version)")
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Run semantic-release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          bunx semantic-release || true
+
+          # Get version after semantic-release
+          NEW_VERSION=$(bun run -e "console.log(require('./package.json').version)")
+          OLD_VERSION="${{ steps.version-before.outputs.version }}"
+
+          # Check if version changed (release was created)
+          if [ "$NEW_VERSION" != "$OLD_VERSION" ]; then
+            echo "new_release_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+            echo "new_release_git_tag=v${NEW_VERSION}" >> $GITHUB_OUTPUT
+            echo "released=true" >> $GITHUB_OUTPUT
+          else
+            # Also check if a new tag was created (fallback)
+            LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+            if [ -n "$LATEST_TAG" ]; then
+              VERSION=${LATEST_TAG#v}
+              # Check if this tag points to current commit
+              TAG_COMMIT=$(git rev-list -n 1 "$LATEST_TAG" 2>/dev/null || echo "")
+              CURRENT_COMMIT=$(git rev-parse HEAD)
+              if [ "$TAG_COMMIT" = "$CURRENT_COMMIT" ]; then
+                echo "new_release_version=${VERSION}" >> $GITHUB_OUTPUT
+                echo "new_release_git_tag=${LATEST_TAG}" >> $GITHUB_OUTPUT
+                echo "released=true" >> $GITHUB_OUTPUT
+              else
+                echo "new_release_version=" >> $GITHUB_OUTPUT
+                echo "new_release_git_tag=" >> $GITHUB_OUTPUT
+                echo "released=false" >> $GITHUB_OUTPUT
+              fi
+            else
+              echo "new_release_version=" >> $GITHUB_OUTPUT
+              echo "new_release_git_tag=" >> $GITHUB_OUTPUT
+              echo "released=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=${{ steps.release.outputs.new_release_git_tag }},enable=${{ steps.release.outputs.released == 'true' }}
+            type=raw,value=${{ steps.release.outputs.new_release_version }},enable=${{ steps.release.outputs.released == 'true' }}
+            type=raw,value=latest,enable=${{ steps.release.outputs.released == 'true' }}
+            type=sha,prefix=main-
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: ${{ steps.release.outputs.released == 'true' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
