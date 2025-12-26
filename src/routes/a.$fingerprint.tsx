@@ -4,7 +4,7 @@ import { fetchAlertmanagerAlerts } from '@/lib/alertmanager/alertmanager-client'
 import { AlertDetail } from '@/components/alerts/alert-detail'
 import { CopyAlertLinkButton } from '@/components/alerts/copy-alert-link-button'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export const Route = createFileRoute('/a/$fingerprint')({
@@ -44,9 +44,9 @@ function AlertError({ error }: { error: Error }) {
       <h1 className="text-xl font-semibold">Alert</h1>
       <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
       <div className="mt-6">
-        <Button asChild variant="outline">
-          <Link to="/alerts">Back to alerts</Link>
-        </Button>
+        <Link to="/alerts" className={buttonVariants({ variant: 'outline' })}>
+          Back to alerts
+        </Link>
       </div>
     </main>
   )
@@ -59,9 +59,9 @@ function AlertRoute() {
     return (
       <main className="mx-auto w-full max-w-6xl px-4 py-10">
         <div className="flex items-center justify-between">
-          <Button asChild variant="outline">
-            <Link to="/alerts">Back</Link>
-          </Button>
+          <Link to="/alerts" className={buttonVariants({ variant: 'outline' })}>
+            Back
+          </Link>
           <ThemeToggle />
         </div>
 
@@ -78,9 +78,9 @@ function AlertRoute() {
     <div>
       <div className="mx-auto w-full max-w-6xl px-4 pt-10">
         <div className="flex items-center justify-between">
-          <Button asChild variant="outline">
-            <Link to="/alerts">Back</Link>
-          </Button>
+          <Link to="/alerts" className={buttonVariants({ variant: 'outline' })}>
+            Back
+          </Link>
           <div className="flex items-center gap-2">
             <CopyAlertLinkButton fingerprint={alert.fingerprint} />
             <ThemeToggle />

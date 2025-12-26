@@ -4,7 +4,7 @@ import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
 import { extractAlertExternalLinks } from '@/lib/alertmanager/alert-link-utils'
 import { AlertSeverityBadge } from '@/components/alerts/alert-severity-badge'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
@@ -104,22 +104,20 @@ export function AlertDetail({ alert }: AlertDetailProps) {
             ) : (
               <div className="grid gap-2">
                 {links.map((link) => (
-                  <Button
+                  <a
                     key={link.href}
-                    asChild
-                    variant="outline"
-                    className="justify-start"
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${link.label} in a new tab`}
+                    className={buttonVariants({
+                      variant: 'outline',
+                      className: 'justify-start',
+                    })}
                   >
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Open ${link.label} in a new tab`}
-                    >
-                      <ExternalLinkIcon className="mr-2 size-4" />
-                      {link.label}
-                    </a>
-                  </Button>
+                    <ExternalLinkIcon className="mr-2 size-4" />
+                    {link.label}
+                  </a>
                 ))}
               </div>
             )}

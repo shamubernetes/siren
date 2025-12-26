@@ -8,7 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 export const Route = createFileRoute('/alerts')({
   loader: async () => {
     const alerts = await fetchAlertmanagerAlerts()
-    return { alerts }
+    return { alerts, nowMs: Date.now() }
   },
   pendingComponent: AlertsPending,
   errorComponent: AlertsError,
@@ -53,7 +53,7 @@ function AlertsError({ error }: { error: Error }) {
 
 function AlertsRoute() {
   const router = useRouter()
-  const { alerts } = Route.useLoaderData()
+  const { alerts, nowMs } = Route.useLoaderData()
 
   const handleRefresh = useCallback(() => {
     void router.invalidate()
@@ -73,5 +73,7 @@ function AlertsRoute() {
     }
   }, [router])
 
-  return <AlertsDashboard alerts={alerts} onRefresh={handleRefresh} />
+  return (
+    <AlertsDashboard alerts={alerts} nowMs={nowMs} onRefresh={handleRefresh} />
+  )
 }
