@@ -82,7 +82,7 @@ export function AlertDetail({ alert }: AlertDetailProps) {
                       <dt className="text-xs font-medium text-muted-foreground">
                         {key}
                       </dt>
-                      <dd className="text-sm break-words">{value}</dd>
+                      <dd className="text-sm wrap-break-word">{value}</dd>
                     </div>
                   ))}
               </dl>
@@ -133,7 +133,7 @@ export function AlertDetail({ alert }: AlertDetailProps) {
             <CardTitle className="text-base">Raw JSON</CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
-            <pre className="max-h-[28rem] overflow-auto rounded-md bg-muted p-3 text-xs leading-relaxed">
+            <pre className="max-h-112 overflow-auto rounded-md bg-muted p-3 text-xs leading-relaxed">
               {JSON.stringify(alert, null, 2)}
             </pre>
           </CardContent>

@@ -133,7 +133,7 @@ export function alertMatchesQuery(alert: AlertmanagerAlert, query: string) {
     .join(' ')
     .toLowerCase()
 
-  return haystack.includes(query)
+  return haystack.includes(query.toLowerCase())
 }
 
 export function formatAgeShort(startsAt: string, nowMs: number = Date.now()) {
@@ -162,7 +162,7 @@ export function formatAgeShort(startsAt: string, nowMs: number = Date.now()) {
   return `${days}d`
 }
 
-export function getSeverityRank(severity: string | undefined) {
+export function getSeverityRank(severity?: string | null) {
   const sev = (severity ?? '').trim().toLowerCase()
   if (sev === 'critical' || sev === 'crit') {
     return 0
