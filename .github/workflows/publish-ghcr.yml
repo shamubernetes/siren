@@ -70,7 +70,7 @@ jobs:
       - name: Get current version
         id: version-before
         run: |
-          VERSION=$(bun run -e "console.log(require('./package.json').version)")
+          VERSION=$(jq -r '.version' package.json)
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Run semantic-release
@@ -81,7 +81,7 @@ jobs:
           bunx semantic-release || true
 
           # Get version after semantic-release
-          NEW_VERSION=$(bun run -e "console.log(require('./package.json').version)")
+          NEW_VERSION=$(jq -r '.version' package.json)
           OLD_VERSION="${{ steps.version-before.outputs.version }}"
 
           # Check if version changed (release was created)
