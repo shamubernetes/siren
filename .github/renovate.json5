@@ -1,0 +1,10 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    "docker:enableMajor"
+  ],
+  "enabled": true,
+  "configWarningReuseIssue": true,
+  "configMigration": true
+}
