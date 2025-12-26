@@ -1,0 +1,79 @@
+---
+description: Enforces consistent naming patterns for files, types, and functions
+globs: *.tsx, *.ts, *.js, *.jsx
+---
+
+# Naming Conventions
+
+Standards for naming TypeScript and JavaScript files, types, and functions.
+
+<rule>
+name: naming_conventions
+description: Enforces consistent naming patterns for files, types, and functions
+filters:
+  # Match TypeScript and JavaScript files
+  - type: file_extension
+    pattern: "\\.(ts|js)$"
+  # Match file creation and modification events
+  - type: event
+    pattern: "(file_create|file_modify)"
+
+actions:
+
+- type: reject
+  conditions:
+
+  # Reject files not in kebab-case
+  - pattern: "^(?!._[A-Z])(?!._\\s)(?!.\*\_)[a-z0-9-]+\\.(ts|js)$"
+    message: "File names must be in kebab-case (e.g., my-file-name.ts)"
+
+- type: suggest
+  message: |
+  Follow these naming conventions:
+  1. Files:
+     - Use kebab-case for all TypeScript and JavaScript files
+     - Examples:
+       ✅ user-service.ts
+       ✅ api-client.js
+       ❌ UserService.ts
+       ❌ apiClient.js
+
+  2. Types (interfaces, types, classes):
+     - Use PascalCase
+     - Examples:
+       ✅ interface UserProfile
+       ✅ type ApiResponse
+       ✅ class HttpClient
+       ❌ interface userProfile
+       ❌ type api_response
+
+  3. Functions:
+     - Use camelCase
+     - Examples:
+       ✅ function getUserData()
+       ✅ const fetchApiResponse = () => {}
+       ❌ function GetUserData()
+       ❌ const fetch_api_response = () => {}
+
+examples:
+
+- input: |
+  // Bad: Incorrect naming
+  UserService.ts
+  API_client.js
+
+  interface user_profile {}
+  function FetchData() {}
+
+  // Good: Correct naming
+  user-service.ts
+  api-client.js
+
+  interface UserProfile {}
+  function fetchData() {}
+  output: "Correctly named files, types, and functions"
+
+metadata:
+priority: high
+version: 1.0
+</rule>
