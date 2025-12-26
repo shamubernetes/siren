@@ -25,7 +25,7 @@ export const Route = createFileRoute('/a/$fingerprint')({
 
 function AlertPending() {
   return (
-    <div className="mx-auto w-full max-w-4xl px-4 py-10">
+    <div className="mx-auto w-full max-w-6xl px-4 py-10">
       <div className="flex items-center justify-between">
         <Skeleton className="h-9 w-24" />
         <Skeleton className="h-9 w-9" />
@@ -40,7 +40,7 @@ function AlertPending() {
 
 function AlertError({ error }: { error: Error }) {
   return (
-    <main className="mx-auto w-full max-w-4xl px-4 py-10">
+    <main className="mx-auto w-full max-w-6xl px-4 py-10">
       <h1 className="text-xl font-semibold">Alert</h1>
       <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
       <div className="mt-6">
@@ -57,7 +57,7 @@ function AlertRoute() {
 
   if (!alert) {
     return (
-      <main className="mx-auto w-full max-w-4xl px-4 py-10">
+      <main className="mx-auto w-full max-w-6xl px-4 py-10">
         <div className="flex items-center justify-between">
           <Button asChild variant="outline">
             <Link to="/alerts">Back</Link>
@@ -76,7 +76,7 @@ function AlertRoute() {
 
   return (
     <div>
-      <div className="mx-auto w-full max-w-4xl px-4 pt-10">
+      <div className="mx-auto w-full max-w-6xl px-4 pt-10">
         <div className="flex items-center justify-between">
           <Button asChild variant="outline">
             <Link to="/alerts">Back</Link>
