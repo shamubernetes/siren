@@ -33,6 +33,7 @@ jobs:
           context: .
           push: false
           load: true
+          platforms: linux/amd64
           tags: siren-pr-test:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -139,6 +140,7 @@ jobs:
         with:
           context: .
           push: ${{ steps.release.outputs.released == 'true' }}
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
