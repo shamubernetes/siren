@@ -94,6 +94,53 @@ docker run -p 3000:3000 \
   siren:latest
 ```
 
+## Kubernetes Health Probes
+
+Siren exposes dedicated endpoints for Kubernetes liveness and readiness probes:
+
+- **`/livez`** - Liveness probe endpoint (always returns `200 OK`)
+- **`/readyz`** - Readiness probe endpoint (returns `200 OK` when ready, `503 Service Unavailable` when not)
+- **`/healthz`** - Human-readable health status page (not intended for probes)
+
+### Example Kubernetes Deployment
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: siren
+spec:
+  template:
+    spec:
+      containers:
+      - name: siren
+        image: ghcr.io/shamubernetes/siren:latest
+        env:
+        - name: ALERTMANAGER_BASE_URL
+          value: "http://alertmanager.monitoring.svc:9093"
+        ports:
+        - containerPort: 3000
+        livenessProbe:
+          httpGet:
+            path: /livez
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 3
+```
+
+The readiness probe checks:
+- `ALERTMANAGER_BASE_URL` is configured and valid
+- Alertmanager is reachable (with a 2-second timeout)
+
+If either check fails, the probe returns `503` and Kubernetes will remove the pod from service endpoints until it becomes ready again.
+
 ## GitHub Container Registry (GHCR)
 
 Images are automatically built and published to GHCR on pushes to `main` and on version tags (`v*`).
