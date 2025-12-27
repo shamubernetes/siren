@@ -5,6 +5,20 @@
 
 A clean, modern dashboard for browsing currently firing Alertmanager alerts with stable deep links to individual alerts.
 
+## App previews
+
+### Main page
+
+<div align="center">
+  <img src="docs/main_page.png" alt="Siren main page preview" width="100%">
+</div>
+
+### Detailed view
+
+<div align="center">
+  <img src="docs/detailed_view.png" alt="Siren alert detailed view preview" width="100%">
+</div>
+
 ## Features
 
 - **Real-time alert browsing** - View all currently firing alerts from Alertmanager
