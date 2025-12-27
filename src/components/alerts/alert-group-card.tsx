@@ -28,11 +28,11 @@ type AlertGroupCardProps = {
 
 export function AlertGroupCard({ group, nowMs }: AlertGroupCardProps) {
   return (
-    <Card>
-      <CardHeader className="pb-3">
+    <Card className="gap-3 py-3 sm:gap-4 sm:py-4">
+      <CardHeader className="pb-2 sm:pb-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <CardTitle className="truncate text-base">
+            <CardTitle className="truncate text-sm sm:text-base">
               {group.alertname}
             </CardTitle>
             <div className="mt-1 text-xs text-muted-foreground">
@@ -43,7 +43,7 @@ export function AlertGroupCard({ group, nowMs }: AlertGroupCardProps) {
         </div>
       </CardHeader>
 
-      <CardContent className="pt-0">
+      <CardContent className="px-3 pt-0 sm:px-4">
         {/* Mobile layout: stacked instance cards */}
         <div className="space-y-3 sm:hidden">
           {group.alerts.map((alert) => (
@@ -134,8 +134,8 @@ type MobileAlertInstanceProps = {
 
 function MobileAlertInstance({ alert, nowMs }: MobileAlertInstanceProps) {
   return (
-    <div className="rounded-lg border bg-card p-3">
-      <div className="space-y-3">
+    <div className="rounded-lg border bg-card p-2.5 sm:p-3">
+      <div className="space-y-2.5 sm:space-y-3">
         {/* Summary */}
         <div className="min-w-0">
           <div className="line-clamp-2 text-sm font-medium">
@@ -158,7 +158,7 @@ function MobileAlertInstance({ alert, nowMs }: MobileAlertInstanceProps) {
         </div>
 
         {/* Metadata row */}
-        <div className="flex flex-wrap items-center gap-3 text-sm">
+        <div className="flex flex-wrap items-center gap-2.5 text-sm sm:gap-3">
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground">Severity:</span>
             <AlertSeverityBadge severity={alert.labels.severity} />

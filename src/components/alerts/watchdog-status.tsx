@@ -9,9 +9,9 @@ type WatchdogStatusProps = {
 
 export function WatchdogStatus({ status, nowMs }: WatchdogStatusProps) {
   return (
-    <footer className="mt-6">
+    <footer className="mt-4 sm:mt-6">
       <div
-        className="flex flex-col gap-2 rounded-lg border bg-card px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between"
+        className="flex flex-col gap-2 rounded-lg border bg-card px-3 py-2.5 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3"
         aria-label="Watchdog heartbeat status"
       >
         <div className="flex min-w-0 items-center gap-2">

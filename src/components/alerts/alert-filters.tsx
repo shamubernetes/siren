@@ -35,8 +35,8 @@ export function AlertFilters({
   totalCount,
 }: AlertFiltersProps) {
   return (
-    <section className="mt-6 rounded-lg border bg-card p-4 shadow-sm">
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <section className="mt-4 rounded-lg border bg-card p-3 shadow-sm sm:mt-6 sm:p-4">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-3">
         <div className="relative w-full md:max-w-sm">
           <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -48,7 +48,7 @@ export function AlertFilters({
           />
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
           <Tabs value={view} onValueChange={onViewChange}>
             <TabsList
               aria-label="Alert state filter"
@@ -80,9 +80,9 @@ export function AlertFilters({
         </div>
       </div>
 
-      <Separator className="my-4" />
+      <Separator className="my-3 sm:my-4" />
 
-      <div className="text-sm text-muted-foreground">
+      <div className="text-xs text-muted-foreground sm:text-sm">
         Showing{' '}
         <span className="font-medium text-foreground">{filteredCount}</span> of{' '}
         <span className="font-medium text-foreground">{totalCount}</span>

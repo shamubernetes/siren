@@ -15,7 +15,7 @@ export function ThemeToggle() {
 
   const handleToggle = useCallback(() => {
     const isCurrentlyDark =
-      typeof window !== 'undefined' &&
+      globalThis.window !== undefined &&
       typeof document?.documentElement?.classList?.contains === 'function'
         ? document.documentElement.classList.contains('dark')
         : isDark

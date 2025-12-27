@@ -9,7 +9,7 @@ const REFRESH_INTERVAL_STORAGE_KEY = 'alerts-refresh-interval'
 const DEFAULT_REFRESH_INTERVAL = 30_000
 
 function getStoredRefreshInterval(): number | null | undefined {
-  if (typeof window === 'undefined') {
+  if (globalThis.window === undefined) {
     return
   }
 
@@ -103,7 +103,7 @@ function AlertsRoute() {
   const handleRefreshIntervalChange = useCallback((interval: number | null) => {
     setRefreshInterval(interval)
 
-    if (typeof window === 'undefined') {
+    if (globalThis.window === undefined) {
       return
     }
     if (typeof localStorage?.setItem !== 'function') {

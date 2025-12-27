@@ -214,8 +214,8 @@ export function AlertsDashboard({
   }, [refreshInterval])
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:py-10">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:py-10">
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
         <div className="min-w-0">
           <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
             <span className="text-primary">Siren</span>
@@ -225,14 +225,14 @@ export function AlertsDashboard({
           </p>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-2">
             <Select
               value={refreshIntervalValue}
               onValueChange={handleRefreshIntervalChange}
             >
               <SelectTrigger
-                className="w-24 overflow-hidden"
+                className="w-20 overflow-hidden sm:w-24"
                 aria-label="Auto-refresh interval"
                 disabled={!isMounted}
               >
@@ -257,7 +257,7 @@ export function AlertsDashboard({
             variant="outline"
             onClick={handleRefreshClick}
             aria-label="Refresh alerts"
-            className="w-full sm:w-auto"
+            className="flex-1 sm:flex-none"
           >
             Refresh
           </Button>
@@ -278,7 +278,7 @@ export function AlertsDashboard({
         totalCount={nonWatchdogAlerts.length}
       />
 
-      <section className="mt-6 grid gap-4">
+      <section className="mt-4 grid gap-3 sm:mt-6 sm:gap-4">
         {groups.length === 0 ? (
           <Card>
             <CardContent className="py-10 text-center text-sm text-muted-foreground">

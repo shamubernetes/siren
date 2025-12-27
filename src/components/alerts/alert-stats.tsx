@@ -7,34 +7,34 @@ type AlertStatsProps = {
 
 export function AlertStats({ counts }: AlertStatsProps) {
   return (
-    <section className="mt-6 grid gap-3 sm:grid-cols-3">
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+    <section className="mt-4 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
+      <Card className="gap-2 py-3 sm:gap-4 sm:py-4">
+        <CardHeader className="pb-1 sm:pb-2">
+          <CardTitle className="text-xs font-medium text-muted-foreground sm:text-sm">
             Firing
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-3xl font-semibold">
+        <CardContent className="text-2xl font-semibold leading-none sm:text-3xl">
           {counts.firing}
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+      <Card className="gap-2 py-3 sm:gap-4 sm:py-4">
+        <CardHeader className="pb-1 sm:pb-2">
+          <CardTitle className="text-xs font-medium text-muted-foreground sm:text-sm">
             Silenced
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-3xl font-semibold">
+        <CardContent className="text-2xl font-semibold leading-none sm:text-3xl">
           {counts.silenced}
         </CardContent>
       </Card>
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+      <Card className="gap-2 py-3 sm:gap-4 sm:py-4">
+        <CardHeader className="pb-1 sm:pb-2">
+          <CardTitle className="text-xs font-medium text-muted-foreground sm:text-sm">
             Inhibited
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-3xl font-semibold">
+        <CardContent className="text-2xl font-semibold leading-none sm:text-3xl">
           {counts.inhibited}
         </CardContent>
       </Card>
