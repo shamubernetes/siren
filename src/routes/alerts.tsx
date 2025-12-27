@@ -8,6 +8,31 @@ import { Skeleton } from '@/components/ui/skeleton'
 const REFRESH_INTERVAL_STORAGE_KEY = 'alerts-refresh-interval'
 const DEFAULT_REFRESH_INTERVAL = 30_000
 
+function getStoredRefreshInterval(): number | null | undefined {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  if (typeof localStorage?.getItem !== 'function') {
+    return
+  }
+
+  try {
+    const stored = localStorage.getItem(REFRESH_INTERVAL_STORAGE_KEY)
+    if (stored === null) {
+      return DEFAULT_REFRESH_INTERVAL
+    }
+    if (stored === 'null') {
+      return null
+    }
+
+    const parsed = Number.parseInt(stored, 10)
+    return Number.isNaN(parsed) ? DEFAULT_REFRESH_INTERVAL : parsed
+  } catch {
+    return
+  }
+}
+
 export const Route = createFileRoute('/alerts')({
   loader: async () => {
     const alerts = await fetchAlertmanagerAlerts()
@@ -58,20 +83,18 @@ function AlertsRoute() {
   const router = useRouter()
   const { alerts, nowMs } = Route.useLoaderData()
 
-  const [refreshInterval, setRefreshInterval] = useState<number | null>(() => {
-    if (typeof globalThis === 'undefined') {
-      return DEFAULT_REFRESH_INTERVAL
+  const [refreshInterval, setRefreshInterval] = useState<number | null>(
+    DEFAULT_REFRESH_INTERVAL,
+  )
+
+  useEffect(() => {
+    const stored = getStoredRefreshInterval()
+    if (stored === undefined) {
+      return
     }
-    const stored = localStorage.getItem(REFRESH_INTERVAL_STORAGE_KEY)
-    if (stored === null) {
-      return DEFAULT_REFRESH_INTERVAL
-    }
-    if (stored === 'null') {
-      return null
-    }
-    const parsed = Number.parseInt(stored, 10)
-    return Number.isNaN(parsed) ? DEFAULT_REFRESH_INTERVAL : parsed
-  })
+
+    setRefreshInterval(stored)
+  }, [])
 
   const handleRefresh = useCallback(() => {
     void router.invalidate()
@@ -79,12 +102,23 @@ function AlertsRoute() {
 
   const handleRefreshIntervalChange = useCallback((interval: number | null) => {
     setRefreshInterval(interval)
-    if (typeof globalThis !== 'undefined') {
+
+    if (typeof window === 'undefined') {
+      return
+    }
+    if (typeof localStorage?.setItem !== 'function') {
+      return
+    }
+
+    try {
       if (interval === null) {
         localStorage.setItem(REFRESH_INTERVAL_STORAGE_KEY, 'null')
-      } else {
-        localStorage.setItem(REFRESH_INTERVAL_STORAGE_KEY, String(interval))
+        return
       }
+
+      localStorage.setItem(REFRESH_INTERVAL_STORAGE_KEY, String(interval))
+    } catch {
+      // ignore write errors (e.g. private mode / disabled storage)
     }
   }, [])
 
