@@ -12,12 +12,15 @@ concurrency:
 
 jobs:
   lint-and-check:
+    if: github.event_name == 'workflow_dispatch' || (github.event.head_commit && !startsWith(github.event.head_commit.message, 'chore(release):'))
     uses: ./.github/workflows/ci.yml
 
   docker-build-test:
+    if: github.event_name == 'workflow_dispatch' || (github.event.head_commit && !startsWith(github.event.head_commit.message, 'chore(release):'))
     uses: ./.github/workflows/docker-build-test.yml
 
   release-prepare:
+    if: github.event_name == 'workflow_dispatch' || (github.event.head_commit && !startsWith(github.event.head_commit.message, 'chore(release):'))
     name: Release (semantic-release)
     runs-on: ubuntu-latest
     needs:
