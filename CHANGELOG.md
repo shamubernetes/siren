@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/shamubernetes/siren/compare/v1.2.2...v1.3.0) (2025-12-27)
+
+
+### Features
+
+* **logging:** Add structured logging with Pino ([b189834](https://github.com/shamubernetes/siren/commit/b1898340b19989d0dcd0e074c4618b2767438238))
+
 ## [1.2.2](https://github.com/shamubernetes/siren/compare/v1.2.1...v1.2.2) (2025-12-27)
 
 
