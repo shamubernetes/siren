@@ -36,4 +36,3 @@ EXPOSE 3000
 
 # Run the Nitro server
 CMD ["node", ".output/server/index.mjs"]
-
