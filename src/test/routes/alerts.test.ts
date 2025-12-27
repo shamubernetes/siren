@@ -102,4 +102,3 @@ describe('alerts route loader', () => {
     )
   })
 })
-

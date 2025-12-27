@@ -51,4 +51,3 @@ describe('livez route', () => {
     expect(text).toBe('ok')
   })
 })
-

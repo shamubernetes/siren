@@ -128,4 +128,3 @@ describe('alert detail route loader', () => {
     ).rejects.toThrow('Network error')
   })
 })
-

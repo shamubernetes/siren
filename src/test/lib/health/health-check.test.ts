@@ -80,4 +80,3 @@ describe('health-check', () => {
     })
   })
 })
-

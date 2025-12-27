@@ -58,4 +58,3 @@ describe('AlertSeverityBadge', () => {
     expect(screen.getByText('Critical')).toBeInTheDocument()
   })
 })
-

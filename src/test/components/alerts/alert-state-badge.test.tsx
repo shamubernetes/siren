@@ -59,4 +59,3 @@ describe('AlertStateBadge', () => {
     expect(screen.queryByText('Inhibited')).not.toBeInTheDocument()
   })
 })
-

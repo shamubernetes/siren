@@ -193,4 +193,3 @@ describe('extractAlertExternalLinks', () => {
     expect(links).toEqual([])
   })
 })
-

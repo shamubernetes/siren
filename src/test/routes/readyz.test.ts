@@ -151,4 +151,3 @@ describe('readyz route', () => {
     expect(callArgs[0]).toBeInstanceOf(AbortSignal)
   })
 })
-

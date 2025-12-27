@@ -526,4 +526,3 @@ describe('AlertsDashboard', () => {
     ).toBeInTheDocument()
   })
 })
-

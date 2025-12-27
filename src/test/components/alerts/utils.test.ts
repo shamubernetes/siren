@@ -411,4 +411,3 @@ describe('getInterestingLabelBadges', () => {
     expect(badges).toEqual([])
   })
 })
-
