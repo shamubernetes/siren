@@ -23,16 +23,18 @@ FROM oven/bun:1-slim AS runner
 
 WORKDIR /app
 
+# Port configuration (can be overridden at build time with --build-arg PORT=8080)
+ARG PORT=3000
+ENV PORT=${PORT}
+
 # Set production environment
 ENV NODE_ENV=production
-ENV PORT=3000
 
 # Copy built application from builder
 COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/package.json ./package.json
 
-# Expose port
-EXPOSE 3000
+EXPOSE ${PORT}
 
 # Run the Nitro server
 CMD ["node", ".output/server/index.mjs"]
