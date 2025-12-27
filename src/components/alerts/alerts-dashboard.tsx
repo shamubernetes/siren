@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
 import { Button } from '@/components/ui/button'
@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Skeleton } from '@/components/ui/skeleton'
 import { AlertFilters } from '@/components/alerts/alert-filters'
 import { AlertGroupCard } from '@/components/alerts/alert-group-card'
 import { AlertStats } from '@/components/alerts/alert-stats'
@@ -36,6 +37,12 @@ export function AlertsDashboard({
   refreshInterval,
   onRefreshIntervalChange,
 }: AlertsDashboardProps) {
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   const watchdogAlerts = useMemo(
     () => alerts.filter((alert) => isWatchdogAlert(alert)),
     [alerts],
@@ -227,8 +234,13 @@ export function AlertsDashboard({
               <SelectTrigger
                 className="w-24 overflow-hidden"
                 aria-label="Auto-refresh interval"
+                disabled={!isMounted}
               >
-                <SelectValue>{formatRefreshIntervalValue}</SelectValue>
+                {isMounted ? (
+                  <SelectValue>{formatRefreshIntervalValue}</SelectValue>
+                ) : (
+                  <Skeleton className="h-4 w-10" />
+                )}
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="off">Off</SelectItem>

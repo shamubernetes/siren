@@ -1,6 +1,6 @@
 import { useTheme } from 'next-themes'
 import { MoonIcon, SunIcon } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { Button } from '@/components/ui/button'
 
@@ -8,22 +8,19 @@ type ThemeValue = 'light' | 'dark' | 'system'
 
 export function ThemeToggle() {
   const { theme, resolvedTheme, setTheme } = useTheme()
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
 
   const isDark = useMemo(() => {
-    if (!isMounted) {
-      return false
-    }
-
     return (resolvedTheme ?? theme) === 'dark'
-  }, [isMounted, resolvedTheme, theme])
+  }, [resolvedTheme, theme])
 
   const handleToggle = useCallback(() => {
-    const nextTheme: ThemeValue = isDark ? 'light' : 'dark'
+    const isCurrentlyDark =
+      typeof window !== 'undefined' &&
+      typeof document?.documentElement?.classList?.contains === 'function'
+        ? document.documentElement.classList.contains('dark')
+        : isDark
+
+    const nextTheme: ThemeValue = isCurrentlyDark ? 'light' : 'dark'
     setTheme(nextTheme)
   }, [isDark, setTheme])
 
@@ -33,13 +30,11 @@ export function ThemeToggle() {
       variant="outline"
       size="icon"
       onClick={handleToggle}
-      aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+      aria-label="Toggle theme"
     >
-      {isDark ? (
-        <MoonIcon className="size-4" />
-      ) : (
-        <SunIcon className="size-4" />
-      )}
+      {/* Render both icons and let the html.dark class decide visibility to avoid hydration-time icon swapping */}
+      <SunIcon className="size-4 dark:hidden" />
+      <MoonIcon className="hidden size-4 dark:block" />
     </Button>
   )
 }
