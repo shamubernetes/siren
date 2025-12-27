@@ -50,62 +50,37 @@ export function AlertGroupCard({
     onExpandedChange(group.alertname, !isExpanded)
   }
 
-  function handleHeaderClick(event: React.MouseEvent<HTMLDivElement>) {
-    const target = event.target as HTMLElement | null
-    if (target?.closest('button,a')) {
-      return
-    }
-
-    handleToggleExpanded()
-  }
-
-  function handleHeaderKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
-    const target = event.target as HTMLElement | null
-    if (target?.closest('button,a')) {
-      return
-    }
-
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return
-    }
-
-    event.preventDefault()
-    handleToggleExpanded()
-  }
-
   return (
     <Card
       className={cn(
         'gap-3 py-3 sm:gap-4 sm:py-4',
-        !isExpanded ? 'py-2 sm:py-3' : null,
+        isExpanded ? null : 'py-2 sm:py-3',
       )}
     >
       <CardHeader
-        className={cn('pb-2 sm:pb-3', !isExpanded ? 'pb-1 sm:pb-2' : null)}
+        className={cn('pb-2 sm:pb-3', isExpanded ? null : 'pb-1 sm:pb-2')}
       >
-        <div
-          className="flex items-start justify-between gap-3"
-          role="button"
-          tabIndex={0}
-          aria-label={`Toggle alert group ${group.alertname}`}
-          aria-expanded={isExpanded}
-          aria-controls={contentId}
-          onClick={handleHeaderClick}
-          onKeyDown={handleHeaderKeyDown}
-        >
-          <div className="min-w-0 select-none">
-            <CardTitle className="truncate text-sm sm:text-base">
-              {group.alertname}
-            </CardTitle>
-            <div className="mt-1 text-xs text-muted-foreground">
-              {group.alerts.length} instance
-              {group.alerts.length === 1 ? '' : 's'}
+        <div className="flex items-center justify-between gap-3">
+          <button
+            type="button"
+            className="flex min-w-0 flex-1 items-start gap-3 text-left"
+            aria-label={`Toggle alert group ${group.alertname}`}
+            aria-expanded={isExpanded}
+            aria-controls={contentId}
+            onClick={handleToggleExpanded}
+          >
+            <div className="min-w-0 select-none">
+              <CardTitle className="truncate text-sm sm:text-base">
+                {group.alertname}
+              </CardTitle>
+              <div className="mt-1 text-xs text-muted-foreground">
+                {group.alerts.length} instance
+                {group.alerts.length === 1 ? '' : 's'}
+              </div>
             </div>
-          </div>
 
-          <div className="flex items-center gap-2">
             {!isExpanded && previewAlert ? (
-              <div className="hidden items-center gap-2 sm:flex">
+              <div className="ml-auto hidden items-center gap-2 self-center sm:flex">
                 <AlertSeverityBadge severity={previewAlert.labels.severity} />
                 <AlertStateBadge alert={previewAlert} />
                 <span className="text-xs text-muted-foreground">
@@ -114,18 +89,25 @@ export function AlertGroupCard({
                 {hasMoreInstances ? (
                   <Badge variant="secondary">+{group.alerts.length - 1}</Badge>
                 ) : null}
-                <div className="ml-1 flex items-center gap-2">
-                  <CopyAlertLinkButton fingerprint={previewAlert.fingerprint} />
-                  <Link
-                    to="/a/$fingerprint"
-                    params={{ fingerprint: previewAlert.fingerprint }}
-                    aria-label="Open alert details"
-                    onClick={(event) => event.stopPropagation()}
-                    className={buttonVariants({ variant: 'outline', size: 'sm' })}
-                  >
-                    Details
-                  </Link>
-                </div>
+              </div>
+            ) : null}
+          </button>
+
+          <div className="flex items-center gap-2">
+            {!isExpanded && previewAlert ? (
+              <div className="hidden items-center gap-2 sm:flex">
+                <CopyAlertLinkButton fingerprint={previewAlert.fingerprint} />
+                <Link
+                  to="/a/$fingerprint"
+                  params={{ fingerprint: previewAlert.fingerprint }}
+                  aria-label="Open alert details"
+                  className={buttonVariants({
+                    variant: 'outline',
+                    size: 'sm',
+                  })}
+                >
+                  Details
+                </Link>
               </div>
             ) : null}
 
@@ -133,11 +115,10 @@ export function AlertGroupCard({
               type="button"
               variant="ghost"
               size="icon-sm"
-              onClick={(event) => {
-                event.stopPropagation()
-                handleToggleExpanded()
-              }}
-              aria-label={isExpanded ? 'Collapse alert group' : 'Expand alert group'}
+              onClick={handleToggleExpanded}
+              aria-label={
+                isExpanded ? 'Collapse alert group' : 'Expand alert group'
+              }
               aria-expanded={isExpanded}
               aria-controls={contentId}
             >
@@ -167,7 +148,6 @@ export function AlertGroupCard({
                 to="/a/$fingerprint"
                 params={{ fingerprint: previewAlert.fingerprint }}
                 aria-label="Open alert details"
-                onClick={(event) => event.stopPropagation()}
                 className={buttonVariants({ variant: 'outline', size: 'sm' })}
               >
                 Details
