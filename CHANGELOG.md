@@ -1,3 +1,11 @@
+# [1.2.0](https://github.com/shamubernetes/siren/compare/v1.1.0...v1.2.0) (2025-12-27)
+
+
+### Features
+
+* Add liveness and readiness probes ([628bd86](https://github.com/shamubernetes/siren/commit/628bd8633e41ba39c63a74b4e318e988a181ca2f))
+* **dockerfile:** make port configurable ([48c3406](https://github.com/shamubernetes/siren/commit/48c3406df26637f061f49178dd45cfbbdc037b03))
+
 # [1.1.0](https://github.com/shamubernetes/siren/compare/v1.0.0...v1.1.0) (2025-12-27)
 
 
