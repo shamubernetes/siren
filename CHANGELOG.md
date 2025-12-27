@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/shamubernetes/siren/compare/v1.2.1...v1.2.2) (2025-12-27)
+
+
+### Bug Fixes
+
+* **tailwind:** Corrects source import path ([c195c81](https://github.com/shamubernetes/siren/commit/c195c81c9006ecce2503eab0294051359ee5dfe1))
+
 # [1.2.1](https://github.com/shamubernetes/siren/compare/v1.2.0...v1.2.1) (2025-12-27)
 
 ### Bug Fixes
