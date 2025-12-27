@@ -4,7 +4,7 @@ import {
   extractAlertExternalLinks,
   getAlertInternalPath,
   getAlertInternalUrl,
-} from './alert-link-utils'
+} from '@/lib/alertmanager/alert-link-utils'
 
 function createMockAlert(
   overrides?: Partial<AlertmanagerAlert>,
@@ -193,3 +193,4 @@ describe('extractAlertExternalLinks', () => {
     expect(links).toEqual([])
   })
 })
+

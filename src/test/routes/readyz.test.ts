@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import type { checkReadiness } from '@/lib/health/health-check'
-import { Route } from './readyz'
+import { Route } from '@/routes/readyz'
 
 const mockCheckReadiness = vi.fn()
 
@@ -151,3 +151,4 @@ describe('readyz route', () => {
     expect(callArgs[0]).toBeInstanceOf(AbortSignal)
   })
 })
+

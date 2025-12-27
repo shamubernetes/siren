@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
-import { Route } from './alerts'
+import { Route } from '@/routes/alerts'
 import { fetchAlertmanagerAlerts } from '@/lib/alertmanager/alertmanager-client'
 
 vi.mock('@/lib/alertmanager/alertmanager-client', () => ({
@@ -102,3 +102,4 @@ describe('alerts route loader', () => {
     )
   })
 })
+

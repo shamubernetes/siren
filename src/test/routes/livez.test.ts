@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { Route } from './livez'
+import { Route } from '@/routes/livez'
 
 function getRouteHandler() {
   const handlers = Route.options.server?.handlers
@@ -51,3 +51,4 @@ describe('livez route', () => {
     expect(text).toBe('ok')
   })
 })
+

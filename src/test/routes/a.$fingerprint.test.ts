@@ -1,6 +1,6 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
-import { Route } from './a.$fingerprint'
+import { Route } from '@/routes/a.$fingerprint'
 
 vi.mock('@/lib/alertmanager/alertmanager-client', () => ({
   fetchAlertmanagerAlerts: vi.fn(),
@@ -128,3 +128,4 @@ describe('alert detail route loader', () => {
     ).rejects.toThrow('Network error')
   })
 })
+

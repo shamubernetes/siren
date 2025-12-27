@@ -1,7 +1,7 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
-import { AlertsDashboard } from './alerts-dashboard'
+import { AlertsDashboard } from '@/components/alerts/alerts-dashboard'
 
 vi.mock('@tanstack/react-router', async () => {
   const actual = await vi.importActual('@tanstack/react-router')
@@ -526,3 +526,4 @@ describe('AlertsDashboard', () => {
     ).toBeInTheDocument()
   })
 })
+

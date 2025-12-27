@@ -11,7 +11,7 @@ import {
   getWatchdogStatus,
   isWatchdogAlert,
   sortAlerts,
-} from './utils'
+} from '@/components/alerts/utils'
 
 function createMockAlert(
   overrides?: Partial<AlertmanagerAlert>,
@@ -411,3 +411,4 @@ describe('getInterestingLabelBadges', () => {
     expect(badges).toEqual([])
   })
 })
+

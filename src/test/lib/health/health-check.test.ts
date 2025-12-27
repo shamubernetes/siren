@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { checkReadiness } from './health-check'
+import { checkReadiness } from '@/lib/health/health-check'
 
 const originalEnv = process.env
 const originalFetch = globalThis.fetch
@@ -80,3 +80,4 @@ describe('health-check', () => {
     })
   })
 })
+

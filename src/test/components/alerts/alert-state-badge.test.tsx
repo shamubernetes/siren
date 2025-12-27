@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
-import { AlertStateBadge } from './alert-state-badge'
+import { AlertStateBadge } from '@/components/alerts/alert-state-badge'
 
 function createMockAlert(
   overrides?: Partial<AlertmanagerAlert>,
@@ -59,3 +59,4 @@ describe('AlertStateBadge', () => {
     expect(screen.queryByText('Inhibited')).not.toBeInTheDocument()
   })
 })
+

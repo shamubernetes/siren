@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { AlertSeverityBadge } from './alert-severity-badge'
+import { AlertSeverityBadge } from '@/components/alerts/alert-severity-badge'
 
 describe('AlertSeverityBadge', () => {
   it('renders "Critical" for critical severity', () => {
@@ -58,3 +58,4 @@ describe('AlertSeverityBadge', () => {
     expect(screen.getByText('Critical')).toBeInTheDocument()
   })
 })
+
