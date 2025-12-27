@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
 import { Button } from '@/components/ui/button'
@@ -149,6 +150,37 @@ export function AlertsDashboard({
     return result
   }, [filteredAlerts])
 
+  const [expandedByGroup, setExpandedByGroup] = useState<
+    Record<string, boolean>
+  >({})
+
+  useEffect(() => {
+    setExpandedByGroup((prev) => {
+      if (groups.length === 0) {
+        return {}
+      }
+
+      let didChange = false
+      const next: Record<string, boolean> = {}
+
+      for (const group of groups) {
+        const existing = prev[group.alertname]
+        if (existing === undefined) {
+          didChange = true
+          next[group.alertname] = false
+          continue
+        }
+        next[group.alertname] = existing
+      }
+
+      if (!didChange && Object.keys(prev).length === Object.keys(next).length) {
+        return prev
+      }
+
+      return next
+    })
+  }, [groups])
+
   const watchdogStatus = useMemo(
     () => getWatchdogStatus(watchdogAlerts),
     [watchdogAlerts],
@@ -213,6 +245,58 @@ export function AlertsDashboard({
     return String(refreshInterval)
   }, [refreshInterval])
 
+  const isAllExpanded = useMemo(() => {
+    if (groups.length === 0) {
+      return false
+    }
+
+    for (const group of groups) {
+      if (!expandedByGroup[group.alertname]) {
+        return false
+      }
+    }
+
+    return true
+  }, [expandedByGroup, groups])
+
+  const isAllCollapsed = useMemo(() => {
+    if (groups.length === 0) {
+      return true
+    }
+
+    for (const group of groups) {
+      if (expandedByGroup[group.alertname]) {
+        return false
+      }
+    }
+
+    return true
+  }, [expandedByGroup, groups])
+
+  const handleGroupExpandedChange = useCallback(
+    (alertname: string, isExpanded: boolean) => {
+      setExpandedByGroup((prev) => {
+        if (prev[alertname] === isExpanded) {
+          return prev
+        }
+        return { ...prev, [alertname]: isExpanded }
+      })
+    },
+    [],
+  )
+
+  const handleExpandAllClick = useCallback(() => {
+    setExpandedByGroup(() =>
+      Object.fromEntries(groups.map((group) => [group.alertname, true])),
+    )
+  }, [groups])
+
+  const handleCollapseAllClick = useCallback(() => {
+    setExpandedByGroup(() =>
+      Object.fromEntries(groups.map((group) => [group.alertname, false])),
+    )
+  }, [groups])
+
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:py-10">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
@@ -251,6 +335,30 @@ export function AlertsDashboard({
               </SelectContent>
             </Select>
             <ThemeToggle />
+            {groups.length > 0 ? (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={handleExpandAllClick}
+                  aria-label="Expand all alert groups"
+                  disabled={isAllExpanded}
+                >
+                  <ChevronDownIcon className="size-4" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  onClick={handleCollapseAllClick}
+                  aria-label="Collapse all alert groups"
+                  disabled={isAllCollapsed}
+                >
+                  <ChevronUpIcon className="size-4" />
+                </Button>
+              </>
+            ) : null}
           </div>
           <Button
             type="button"
@@ -287,7 +395,13 @@ export function AlertsDashboard({
           </Card>
         ) : (
           groups.map((group) => (
-            <AlertGroupCard key={group.alertname} group={group} nowMs={nowMs} />
+            <AlertGroupCard
+              key={group.alertname}
+              group={group}
+              nowMs={nowMs}
+              isExpanded={expandedByGroup[group.alertname] ?? false}
+              onExpandedChange={handleGroupExpandedChange}
+            />
           ))
         )}
       </section>

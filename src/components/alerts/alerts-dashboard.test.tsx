@@ -217,6 +217,91 @@ describe('AlertsDashboard', () => {
     expect(mockOnRefresh).toHaveBeenCalledTimes(1)
   })
 
+  it('collapses alert groups by default and expands when toggled', () => {
+    const alerts = [
+      createMockAlert({
+        fingerprint: 'a-1',
+        labels: {
+          alertname: 'TestAlert',
+          severity: 'critical',
+          namespace: 'demo',
+          pod: 'demo-pod',
+        },
+        annotations: { summary: 'First summary' },
+      }),
+      createMockAlert({
+        fingerprint: 'a-2',
+        labels: {
+          alertname: 'TestAlert',
+          severity: 'critical',
+          namespace: 'demo',
+          pod: 'demo-pod',
+        },
+        annotations: { summary: 'Second summary' },
+      }),
+    ]
+
+    render(
+      <AlertsDashboard
+        alerts={alerts}
+        nowMs={nowMs}
+        onRefresh={mockOnRefresh}
+        refreshInterval={30000}
+        onRefreshIntervalChange={mockOnRefreshIntervalChange}
+      />,
+    )
+
+    // Collapsed by default: the full table content isn't rendered
+    expect(screen.queryByText('Summary')).not.toBeInTheDocument()
+    expect(screen.queryByText('Second summary')).not.toBeInTheDocument()
+
+    // Label badges should not be displayed
+    expect(screen.queryByText('namespace=demo')).not.toBeInTheDocument()
+    expect(screen.queryByText('pod=demo-pod')).not.toBeInTheDocument()
+
+    // Clicking the header toggles expand/collapse
+    fireEvent.click(screen.getByText('TestAlert'))
+
+    expect(screen.getByText('Summary')).toBeInTheDocument()
+    expect(screen.getByText('Second summary')).toBeInTheDocument()
+  })
+
+  it('expands and collapses all alert groups', () => {
+    const alerts = [
+      createMockAlert({
+        fingerprint: 'a-1',
+        labels: { alertname: 'GroupA', severity: 'critical' },
+        annotations: { summary: 'A1' },
+      }),
+      createMockAlert({
+        fingerprint: 'b-1',
+        labels: { alertname: 'GroupB', severity: 'warning' },
+        annotations: { summary: 'B1' },
+      }),
+    ]
+
+    render(
+      <AlertsDashboard
+        alerts={alerts}
+        nowMs={nowMs}
+        onRefresh={mockOnRefresh}
+        refreshInterval={30000}
+        onRefreshIntervalChange={mockOnRefreshIntervalChange}
+      />,
+    )
+
+    // Collapsed by default
+    expect(screen.queryByText('Summary')).not.toBeInTheDocument()
+
+    const expandAllButton = screen.getByLabelText('Expand all alert groups')
+    fireEvent.click(expandAllButton)
+    expect(screen.getByText('Summary')).toBeInTheDocument()
+
+    const collapseAllButton = screen.getByLabelText('Collapse all alert groups')
+    fireEvent.click(collapseAllButton)
+    expect(screen.queryByText('Summary')).not.toBeInTheDocument()
+  })
+
   it('displays filtered count', () => {
     const alerts = [
       createMockAlert({

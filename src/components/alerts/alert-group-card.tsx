@@ -1,10 +1,11 @@
 import { Link } from '@tanstack/react-router'
+import { ChevronDownIcon } from 'lucide-react'
 import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
 import { AlertSeverityBadge } from '@/components/alerts/alert-severity-badge'
 import { AlertStateBadge } from '@/components/alerts/alert-state-badge'
 import { CopyAlertLinkButton } from '@/components/alerts/copy-alert-link-button'
 import { Badge } from '@/components/ui/badge'
-import { buttonVariants } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Table,
@@ -14,24 +15,85 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 import type { AlertGroup } from './types'
-import {
-  formatAgeShort,
-  getAlertSummary,
-  getInterestingLabelBadges,
-} from './utils'
+import { formatAgeShort, getAlertSummary } from './utils'
 
 type AlertGroupCardProps = {
   group: AlertGroup
   nowMs: number
+  isExpanded: boolean
+  onExpandedChange: (alertname: string, isExpanded: boolean) => void
 }
 
-export function AlertGroupCard({ group, nowMs }: AlertGroupCardProps) {
+function getGroupContentId(alertname: string) {
+  const slug = alertname
+    .trim()
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9]+/g, '-')
+    .replaceAll(/(^-|-$)/g, '')
+
+  return `alert-group-${slug || 'group'}`
+}
+
+export function AlertGroupCard({
+  group,
+  nowMs,
+  isExpanded,
+  onExpandedChange,
+}: AlertGroupCardProps) {
+  const previewAlert = group.alerts[0]
+  const contentId = getGroupContentId(group.alertname)
+  const hasMoreInstances = group.alerts.length > 1
+
+  function handleToggleExpanded() {
+    onExpandedChange(group.alertname, !isExpanded)
+  }
+
+  function handleHeaderClick(event: React.MouseEvent<HTMLDivElement>) {
+    const target = event.target as HTMLElement | null
+    if (target?.closest('button,a')) {
+      return
+    }
+
+    handleToggleExpanded()
+  }
+
+  function handleHeaderKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    const target = event.target as HTMLElement | null
+    if (target?.closest('button,a')) {
+      return
+    }
+
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return
+    }
+
+    event.preventDefault()
+    handleToggleExpanded()
+  }
+
   return (
-    <Card className="gap-3 py-3 sm:gap-4 sm:py-4">
-      <CardHeader className="pb-2 sm:pb-3">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div className="min-w-0">
+    <Card
+      className={cn(
+        'gap-3 py-3 sm:gap-4 sm:py-4',
+        !isExpanded ? 'py-2 sm:py-3' : null,
+      )}
+    >
+      <CardHeader
+        className={cn('pb-2 sm:pb-3', !isExpanded ? 'pb-1 sm:pb-2' : null)}
+      >
+        <div
+          className="flex items-start justify-between gap-3"
+          role="button"
+          tabIndex={0}
+          aria-label={`Toggle alert group ${group.alertname}`}
+          aria-expanded={isExpanded}
+          aria-controls={contentId}
+          onClick={handleHeaderClick}
+          onKeyDown={handleHeaderKeyDown}
+        >
+          <div className="min-w-0 select-none">
             <CardTitle className="truncate text-sm sm:text-base">
               {group.alertname}
             </CardTitle>
@@ -40,41 +102,119 @@ export function AlertGroupCard({ group, nowMs }: AlertGroupCardProps) {
               {group.alerts.length === 1 ? '' : 's'}
             </div>
           </div>
+
+          <div className="flex items-center gap-2">
+            {!isExpanded && previewAlert ? (
+              <div className="hidden items-center gap-2 sm:flex">
+                <AlertSeverityBadge severity={previewAlert.labels.severity} />
+                <AlertStateBadge alert={previewAlert} />
+                <span className="text-xs text-muted-foreground">
+                  {formatAgeShort(previewAlert.startsAt, nowMs)}
+                </span>
+                {hasMoreInstances ? (
+                  <Badge variant="secondary">+{group.alerts.length - 1}</Badge>
+                ) : null}
+                <div className="ml-1 flex items-center gap-2">
+                  <CopyAlertLinkButton fingerprint={previewAlert.fingerprint} />
+                  <Link
+                    to="/a/$fingerprint"
+                    params={{ fingerprint: previewAlert.fingerprint }}
+                    aria-label="Open alert details"
+                    onClick={(event) => event.stopPropagation()}
+                    className={buttonVariants({ variant: 'outline', size: 'sm' })}
+                  >
+                    Details
+                  </Link>
+                </div>
+              </div>
+            ) : null}
+
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              onClick={(event) => {
+                event.stopPropagation()
+                handleToggleExpanded()
+              }}
+              aria-label={isExpanded ? 'Collapse alert group' : 'Expand alert group'}
+              aria-expanded={isExpanded}
+              aria-controls={contentId}
+            >
+              <ChevronDownIcon
+                className={cn(
+                  'size-4 transition-transform',
+                  isExpanded ? 'rotate-180' : 'rotate-0',
+                )}
+              />
+            </Button>
+          </div>
         </div>
+
+        {!isExpanded && previewAlert ? (
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-sm sm:hidden">
+            <AlertSeverityBadge severity={previewAlert.labels.severity} />
+            <AlertStateBadge alert={previewAlert} />
+            <span className="text-muted-foreground">
+              {formatAgeShort(previewAlert.startsAt, nowMs)}
+            </span>
+            {hasMoreInstances ? (
+              <Badge variant="secondary">+{group.alerts.length - 1}</Badge>
+            ) : null}
+            <div className="ml-auto flex items-center gap-2">
+              <CopyAlertLinkButton fingerprint={previewAlert.fingerprint} />
+              <Link
+                to="/a/$fingerprint"
+                params={{ fingerprint: previewAlert.fingerprint }}
+                aria-label="Open alert details"
+                onClick={(event) => event.stopPropagation()}
+                className={buttonVariants({ variant: 'outline', size: 'sm' })}
+              >
+                Details
+              </Link>
+            </div>
+          </div>
+        ) : null}
       </CardHeader>
 
-      <CardContent className="px-3 pt-0 sm:px-4">
-        {/* Mobile layout: stacked instance cards */}
-        <div className="space-y-3 sm:hidden">
-          {group.alerts.map((alert) => (
-            <MobileAlertInstance
-              key={alert.fingerprint}
-              alert={alert}
-              nowMs={nowMs}
-            />
-          ))}
-        </div>
+      {isExpanded ? (
+        <CardContent id={contentId} className="px-3 pt-0 sm:px-4">
+          {/* Mobile layout: stacked instance cards */}
+          <div className="space-y-3 sm:hidden">
+            {group.alerts.map((alert) => (
+              <MobileAlertInstance
+                key={alert.fingerprint}
+                alert={alert}
+                nowMs={nowMs}
+              />
+            ))}
+          </div>
 
-        {/* Desktop layout: table */}
-        <div className="hidden sm:block">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[42%]">Summary</TableHead>
-                <TableHead>Severity</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Age</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {group.alerts.map((alert) => (
-                <AlertRow key={alert.fingerprint} alert={alert} nowMs={nowMs} />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
+          {/* Desktop layout: table */}
+          <div className="hidden sm:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[42%]">Summary</TableHead>
+                  <TableHead>Severity</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Age</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {group.alerts.map((alert) => (
+                  <AlertRow
+                    key={alert.fingerprint}
+                    alert={alert}
+                    nowMs={nowMs}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      ) : null}
     </Card>
   )
 }
@@ -91,13 +231,6 @@ function AlertRow({ alert, nowMs }: AlertRowProps) {
         <div className="min-w-0">
           <div className="truncate text-sm font-medium">
             {getAlertSummary(alert)}
-          </div>
-          <div className="mt-1 flex flex-wrap items-center gap-2">
-            {getInterestingLabelBadges(alert).map((badge) => (
-              <Badge key={badge} variant="secondary">
-                {badge}
-              </Badge>
-            ))}
           </div>
         </div>
       </TableCell>
@@ -141,20 +274,6 @@ function MobileAlertInstance({ alert, nowMs }: MobileAlertInstanceProps) {
           <div className="line-clamp-2 text-sm font-medium">
             {getAlertSummary(alert)}
           </div>
-        </div>
-
-        {/* Badges */}
-        <div className="flex flex-wrap items-center gap-2">
-          {getInterestingLabelBadges(alert).map((badge) => (
-            <Badge
-              key={badge}
-              variant="secondary"
-              className="max-w-full truncate"
-              title={badge}
-            >
-              {badge}
-            </Badge>
-          ))}
         </div>
 
         {/* Metadata row */}
