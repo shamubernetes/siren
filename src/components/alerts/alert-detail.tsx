@@ -4,7 +4,7 @@ import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
 import { extractAlertExternalLinks } from '@/lib/alertmanager/alert-link-utils'
 import { AlertSeverityBadge } from '@/components/alerts/alert-severity-badge'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
@@ -82,7 +82,7 @@ export function AlertDetail({ alert }: AlertDetailProps) {
                       <dt className="text-xs font-medium text-muted-foreground">
                         {key}
                       </dt>
-                      <dd className="text-sm break-words">{value}</dd>
+                      <dd className="text-sm wrap-break-word">{value}</dd>
                     </div>
                   ))}
               </dl>
@@ -104,22 +104,20 @@ export function AlertDetail({ alert }: AlertDetailProps) {
             ) : (
               <div className="grid gap-2">
                 {links.map((link) => (
-                  <Button
+                  <a
                     key={link.href}
-                    asChild
-                    variant="outline"
-                    className="justify-start"
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${link.label} in a new tab`}
+                    className={buttonVariants({
+                      variant: 'outline',
+                      className: 'justify-start',
+                    })}
                   >
-                    <a
-                      href={link.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`Open ${link.label} in a new tab`}
-                    >
-                      <ExternalLinkIcon className="mr-2 size-4" />
-                      {link.label}
-                    </a>
-                  </Button>
+                    <ExternalLinkIcon className="mr-2 size-4" />
+                    {link.label}
+                  </a>
                 ))}
               </div>
             )}
@@ -135,7 +133,7 @@ export function AlertDetail({ alert }: AlertDetailProps) {
             <CardTitle className="text-base">Raw JSON</CardTitle>
           </CardHeader>
           <CardContent className="pt-0">
-            <pre className="max-h-[28rem] overflow-auto rounded-md bg-muted p-3 text-xs leading-relaxed">
+            <pre className="max-h-112 overflow-auto rounded-md bg-muted p-3 text-xs leading-relaxed">
               {JSON.stringify(alert, null, 2)}
             </pre>
           </CardContent>

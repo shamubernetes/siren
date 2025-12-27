@@ -9,10 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReadyzRouteImport } from './routes/readyz'
+import { Route as LivezRouteImport } from './routes/livez'
+import { Route as HealthzRouteImport } from './routes/healthz'
 import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AFingerprintRouteImport } from './routes/a.$fingerprint'
 
+const ReadyzRoute = ReadyzRouteImport.update({
+  id: '/readyz',
+  path: '/readyz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LivezRoute = LivezRouteImport.update({
+  id: '/livez',
+  path: '/livez',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HealthzRoute = HealthzRouteImport.update({
+  id: '/healthz',
+  path: '/healthz',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AlertsRoute = AlertsRouteImport.update({
   id: '/alerts',
   path: '/alerts',
@@ -32,35 +50,81 @@ const AFingerprintRoute = AFingerprintRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/alerts': typeof AlertsRoute
+  '/healthz': typeof HealthzRoute
+  '/livez': typeof LivezRoute
+  '/readyz': typeof ReadyzRoute
   '/a/$fingerprint': typeof AFingerprintRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/alerts': typeof AlertsRoute
+  '/healthz': typeof HealthzRoute
+  '/livez': typeof LivezRoute
+  '/readyz': typeof ReadyzRoute
   '/a/$fingerprint': typeof AFingerprintRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/alerts': typeof AlertsRoute
+  '/healthz': typeof HealthzRoute
+  '/livez': typeof LivezRoute
+  '/readyz': typeof ReadyzRoute
   '/a/$fingerprint': typeof AFingerprintRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/alerts' | '/a/$fingerprint'
+  fullPaths:
+    | '/'
+    | '/alerts'
+    | '/healthz'
+    | '/livez'
+    | '/readyz'
+    | '/a/$fingerprint'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/alerts' | '/a/$fingerprint'
-  id: '__root__' | '/' | '/alerts' | '/a/$fingerprint'
+  to: '/' | '/alerts' | '/healthz' | '/livez' | '/readyz' | '/a/$fingerprint'
+  id:
+    | '__root__'
+    | '/'
+    | '/alerts'
+    | '/healthz'
+    | '/livez'
+    | '/readyz'
+    | '/a/$fingerprint'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlertsRoute: typeof AlertsRoute
+  HealthzRoute: typeof HealthzRoute
+  LivezRoute: typeof LivezRoute
+  ReadyzRoute: typeof ReadyzRoute
   AFingerprintRoute: typeof AFingerprintRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/readyz': {
+      id: '/readyz'
+      path: '/readyz'
+      fullPath: '/readyz'
+      preLoaderRoute: typeof ReadyzRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/livez': {
+      id: '/livez'
+      path: '/livez'
+      fullPath: '/livez'
+      preLoaderRoute: typeof LivezRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/healthz': {
+      id: '/healthz'
+      path: '/healthz'
+      fullPath: '/healthz'
+      preLoaderRoute: typeof HealthzRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/alerts': {
       id: '/alerts'
       path: '/alerts'
@@ -88,6 +152,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlertsRoute: AlertsRoute,
+  HealthzRoute: HealthzRoute,
+  LivezRoute: LivezRoute,
+  ReadyzRoute: ReadyzRoute,
   AFingerprintRoute: AFingerprintRoute,
 }
 export const routeTree = rootRouteImport

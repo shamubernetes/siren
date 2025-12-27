@@ -1,6 +1,6 @@
 import { CopyIcon } from 'lucide-react'
 import { toast } from 'sonner'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { getAlertInternalUrl } from '@/lib/alertmanager/alert-link-utils'
 import { Button } from '@/components/ui/button'
@@ -15,12 +15,16 @@ type CopyAlertLinkButtonProps = {
 }
 
 export function CopyAlertLinkButton({ fingerprint }: CopyAlertLinkButtonProps) {
-  const url = useMemo(() => {
-    if (typeof globalThis === 'undefined') {
-      return null
+  const [url, setUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    const origin = globalThis.location?.origin
+    if (!origin) {
+      setUrl(null)
+      return
     }
 
-    return getAlertInternalUrl(fingerprint, globalThis.location.origin)
+    setUrl(getAlertInternalUrl(fingerprint, origin))
   }, [fingerprint])
 
   const handleCopy = useCallback(async () => {
@@ -39,18 +43,20 @@ export function CopyAlertLinkButton({ fingerprint }: CopyAlertLinkButtonProps) {
 
   return (
     <Tooltip>
-      <TooltipTrigger>
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          onClick={handleCopy}
-          aria-label="Copy alert link"
-          disabled={!url}
-        >
-          <CopyIcon className="size-4" />
-        </Button>
-      </TooltipTrigger>
+      <TooltipTrigger
+        render={
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={handleCopy}
+            aria-label="Copy alert link"
+            disabled={!url}
+          >
+            <CopyIcon className="size-4" />
+          </Button>
+        }
+      />
       <TooltipContent>Copy link</TooltipContent>
     </Tooltip>
   )

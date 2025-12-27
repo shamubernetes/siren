@@ -1,5 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
 import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
+import { createChildLogger } from '@/lib/logger'
+
+const log = createChildLogger('alertmanager')
 
 function getAlertmanagerBaseUrl() {
   const baseUrl = process.env.ALERTMANAGER_BASE_URL
@@ -24,38 +27,90 @@ export const fetchAlertmanagerAlerts = createServerFn({
 }).handler(async ({ signal }) => {
   const baseUrl = getAlertmanagerBaseUrl()
   const alertsUrl = `${baseUrl}/api/v2/alerts`
+  const startTime = Date.now()
 
-  const response = await fetch(alertsUrl, {
-    headers: {
-      accept: 'application/json',
-    },
-    signal,
-  })
+  log.debug({ url: alertsUrl }, 'fetching alerts')
 
-  if (!response.ok) {
-    let bodyText = ''
+  try {
+    const response = await fetch(alertsUrl, {
+      headers: {
+        accept: 'application/json',
+      },
+      signal,
+    })
 
-    try {
-      bodyText = await response.text()
-    } catch {
-      bodyText = ''
+    const latencyMs = Date.now() - startTime
+
+    if (!response.ok) {
+      let bodyText = ''
+
+      try {
+        bodyText = await response.text()
+      } catch {
+        bodyText = ''
+      }
+
+      const trimmedBody = bodyText.trim()
+      const suffix = trimmedBody ? `: ${trimmedBody.slice(0, 500)}` : ''
+
+      const error = new Error(
+        `Alertmanager request failed (${response.status} ${response.statusText})${suffix}`,
+      )
+
+      log.error(
+        {
+          error: error.message,
+          statusCode: response.status,
+          latencyMs,
+        },
+        'failed to fetch alerts',
+      )
+
+      throw error
     }
 
-    const trimmedBody = bodyText.trim()
-    const suffix = trimmedBody ? `: ${trimmedBody.slice(0, 500)}` : ''
+    const data = (await response.json()) as Array<AlertmanagerAlert>
 
-    throw new Error(
-      `Alertmanager request failed (${response.status} ${response.statusText})${suffix}`,
+    if (!Array.isArray(data)) {
+      const error = new TypeError(
+        'Alertmanager returned an invalid alerts payload (expected an array).',
+      )
+
+      log.error(
+        {
+          error: error.message,
+          statusCode: response.status,
+          latencyMs,
+        },
+        'failed to fetch alerts',
+      )
+
+      throw error
+    }
+
+    log.info(
+      {
+        count: data.length,
+        latencyMs,
+      },
+      'fetched alerts',
     )
+
+    return data
+  } catch (error) {
+    const latencyMs = Date.now() - startTime
+
+    if (error instanceof Error && error.name !== 'TypeError') {
+      log.error(
+        {
+          error: error.message,
+          statusCode: null,
+          latencyMs,
+        },
+        'failed to fetch alerts',
+      )
+    }
+
+    throw error
   }
-
-  const data = (await response.json()) as Array<AlertmanagerAlert>
-
-  if (!Array.isArray(data)) {
-    throw new TypeError(
-      'Alertmanager returned an invalid alerts payload (expected an array).',
-    )
-  }
-
-  return data
 })

@@ -1,10 +1,151 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:best-practices",
-    "docker:enableMajor"
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "config:recommended"
   ],
-  "enabled": true,
-  "configWarningReuseIssue": true,
-  "configMigration": true
+  dependencyDashboard: true,
+  labels: [
+    "dependencies"
+  ],
+  rebaseWhen: "behind-base-branch",
+  semanticCommits: "enabled",
+  semanticCommitType: "chore",
+  semanticCommitScope: "deps",
+  automergeType: "pr",
+  automergeStrategy: "squash",
+  packageRules: [
+    {
+      matchUpdateTypes: [
+        "patch",
+        "pin",
+        "digest"
+      ],
+      automerge: true,
+    },
+    {
+      matchManagers: [
+        "npm",
+        "bun"
+      ],
+      rangeStrategy: "pin",
+    },
+    {
+      matchDepTypes: [
+        "devDependencies"
+      ],
+      matchUpdateTypes: [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      automerge: true,
+    },
+    {
+      matchDepTypes: [
+        "dependencies"
+      ],
+      minimumReleaseAge: "12h",
+    },
+    {
+      matchDepTypes: [
+        "dependencies"
+      ],
+      matchUpdateTypes: [
+        "minor"
+      ],
+      automerge: true,
+      minimumReleaseAge: "12h",
+    },
+    {
+      matchDatasources: [
+        "node-version"
+      ],
+      allowedVersions: "<25",
+    },
+    {
+      matchPackageNames: [
+        "@types/node"
+      ],
+      allowedVersions: "<25",
+    },
+    {
+      matchPackageNames: [
+        "typescript",
+        "eslint-config-prettier",
+        "/^@types//",
+        "/^@typescript-eslint//",
+        "/^eslint/",
+        "/^oxlint/",
+        "/^prettier/",
+        "/^prettier-plugin-/",
+      ],
+      groupName: "dev tooling",
+    },
+    {
+      matchPackageNames: [
+        "react",
+        "react-dom"
+      ],
+      groupName: "react",
+    },
+    {
+      matchPackageNames: [
+        "/^@tanstack//"
+      ],
+      groupName: "tanstack",
+    },
+    {
+      matchPackageNames: [
+        "/^@semantic-release//",
+        "semantic-release"
+      ],
+      groupName: "semantic-release",
+    },
+    {
+      groupName: "base-ui",
+      matchPackageNames: [
+        "/^@base-ui//",
+        "/^@radix-ui//"
+      ],
+    },
+    {
+      matchPackageNames: [
+        "tailwindcss",
+        "/^@tailwindcss//"
+      ],
+      groupName: "tailwind",
+    },
+    {
+      matchManagers: [
+        "github-actions"
+      ],
+      matchUpdateTypes: [
+        "minor",
+        "patch",
+        "digest"
+      ],
+      automerge: true,
+      pinDigests: true,
+    },
+    {
+      matchPackageNames: [
+        "vite",
+        "/^@vitejs//",
+        "vitest",
+        "/^@vitest//"
+      ],
+      groupName: "vite",
+    }
+  ],
+  lockFileMaintenance: {
+    enabled: true,
+    schedule: [
+      "every weekend"
+    ],
+    automerge: true,
+    automergeType: "pr",
+  },
+  prConcurrentLimit: 0,
+  prHourlyLimit: 0,
 }
