@@ -50,7 +50,10 @@ export function AlertFilters({
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <Tabs value={view} onValueChange={onViewChange}>
-            <TabsList aria-label="Alert state filter">
+            <TabsList
+              aria-label="Alert state filter"
+              className="w-full sm:w-fit"
+            >
               <TabsTrigger value="all">All</TabsTrigger>
               <TabsTrigger value="firing">Firing</TabsTrigger>
               <TabsTrigger value="silenced">Silenced</TabsTrigger>

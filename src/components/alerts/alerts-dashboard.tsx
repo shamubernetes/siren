@@ -207,7 +207,7 @@ export function AlertsDashboard({
   }, [refreshInterval])
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10">
+    <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:py-10">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="min-w-0">
           <h1 className="text-3xl font-black tracking-tight sm:text-4xl">
@@ -218,31 +218,34 @@ export function AlertsDashboard({
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Select
-            value={refreshIntervalValue}
-            onValueChange={handleRefreshIntervalChange}
-          >
-            <SelectTrigger
-              className="w-24 overflow-hidden"
-              aria-label="Auto-refresh interval"
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-2">
+            <Select
+              value={refreshIntervalValue}
+              onValueChange={handleRefreshIntervalChange}
             >
-              <SelectValue>{formatRefreshIntervalValue}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="off">Off</SelectItem>
-              <SelectItem value="10000">10s</SelectItem>
-              <SelectItem value="30000">30s</SelectItem>
-              <SelectItem value="60000">1m</SelectItem>
-              <SelectItem value="300000">5m</SelectItem>
-            </SelectContent>
-          </Select>
-          <ThemeToggle />
+              <SelectTrigger
+                className="w-24 overflow-hidden"
+                aria-label="Auto-refresh interval"
+              >
+                <SelectValue>{formatRefreshIntervalValue}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="off">Off</SelectItem>
+                <SelectItem value="10000">10s</SelectItem>
+                <SelectItem value="30000">30s</SelectItem>
+                <SelectItem value="60000">1m</SelectItem>
+                <SelectItem value="300000">5m</SelectItem>
+              </SelectContent>
+            </Select>
+            <ThemeToggle />
+          </div>
           <Button
             type="button"
             variant="outline"
             onClick={handleRefreshClick}
             aria-label="Refresh alerts"
+            className="w-full sm:w-auto"
           >
             Refresh
           </Button>
