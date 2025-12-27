@@ -1,3 +1,19 @@
+# [1.1.0](https://github.com/shamubernetes/siren/compare/v1.0.0...v1.1.0) (2025-12-27)
+
+
+### Bug Fixes
+
+* **alerts:** Improve refresh interval storage robustness ([a59c720](https://github.com/shamubernetes/siren/commit/a59c72068c2829affd872214ebd686a5a2a87b3f))
+* **hydration:** Prevents theme flash and UI issues ([1a2927d](https://github.com/shamubernetes/siren/commit/1a2927d08ee9dea71ecb278899d35863e2d80c77))
+
+
+### Features
+
+* **alerts:** Add alert group expand/collapse ([434ad09](https://github.com/shamubernetes/siren/commit/434ad096a542a89e672b3e24b6d94fb33bfddeb1))
+* **alerts:** Conditionally show watchdog status ([4f9141f](https://github.com/shamubernetes/siren/commit/4f9141fb05b9a2cb96d53f791eb38ea2fea04395))
+* **alerts:** Implement mobile alert instance cards ([206a8e8](https://github.com/shamubernetes/siren/commit/206a8e8b9032062edd80586ae62e09a0acbe4e2d))
+* **license:** Add GNU GPLv3 license ([7bbe97f](https://github.com/shamubernetes/siren/commit/7bbe97f911e3e7e10be5af3d4fad2680bbd6edc1))
+
 # 1.0.0 (2025-12-27)
 
 
