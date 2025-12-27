@@ -186,6 +186,39 @@ export function AlertsDashboard({
     [watchdogAlerts],
   )
 
+  const shouldShowWatchdogStatus = useMemo(() => {
+    const q = searchText.trim().toLowerCase()
+    const hasActiveFilters =
+      q !== '' || view !== 'all' || severityFilter !== 'all'
+
+    if (!hasActiveFilters) {
+      return true
+    }
+
+    for (const alert of watchdogAlerts) {
+      if (view !== 'all' && getAlertKind(alert) !== view) {
+        continue
+      }
+
+      if (severityFilter !== 'all') {
+        const sev = (alert.labels.severity ?? '').trim()
+        if (sev !== severityFilter) {
+          continue
+        }
+      }
+
+      if (!q) {
+        return true
+      }
+
+      if (alertMatchesQuery(alert, q)) {
+        return true
+      }
+    }
+
+    return false
+  }, [watchdogAlerts, searchText, severityFilter, view])
+
   const handleSearchChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearchText(event.target.value)
@@ -406,7 +439,9 @@ export function AlertsDashboard({
         )}
       </section>
 
-      <WatchdogStatus status={watchdogStatus} nowMs={nowMs} />
+      {shouldShowWatchdogStatus ? (
+        <WatchdogStatus status={watchdogStatus} nowMs={nowMs} />
+      ) : null}
     </div>
   )
 }

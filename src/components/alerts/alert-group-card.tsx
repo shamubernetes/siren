@@ -81,14 +81,14 @@ export function AlertGroupCard({
 
             {!isExpanded && previewAlert ? (
               <div className="ml-auto hidden items-center gap-2 self-center sm:flex">
+                {hasMoreInstances ? (
+                  <Badge variant="secondary">+{group.alerts.length - 1}</Badge>
+                ) : null}
                 <AlertSeverityBadge severity={previewAlert.labels.severity} />
                 <AlertStateBadge alert={previewAlert} />
                 <span className="text-xs text-muted-foreground">
                   {formatAgeShort(previewAlert.startsAt, nowMs)}
                 </span>
-                {hasMoreInstances ? (
-                  <Badge variant="secondary">+{group.alerts.length - 1}</Badge>
-                ) : null}
               </div>
             ) : null}
           </button>
@@ -134,14 +134,14 @@ export function AlertGroupCard({
 
         {!isExpanded && previewAlert ? (
           <div className="mt-2 flex flex-wrap items-center gap-2 text-sm sm:hidden">
+            {hasMoreInstances ? (
+              <Badge variant="secondary">+{group.alerts.length - 1}</Badge>
+            ) : null}
             <AlertSeverityBadge severity={previewAlert.labels.severity} />
             <AlertStateBadge alert={previewAlert} />
             <span className="text-muted-foreground">
               {formatAgeShort(previewAlert.startsAt, nowMs)}
             </span>
-            {hasMoreInstances ? (
-              <Badge variant="secondary">+{group.alerts.length - 1}</Badge>
-            ) : null}
             <div className="ml-auto flex items-center gap-2">
               <CopyAlertLinkButton fingerprint={previewAlert.fingerprint} />
               <Link
