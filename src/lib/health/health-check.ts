@@ -1,3 +1,5 @@
+import { createChildLogger } from '@/lib/logger'
+
 export interface HealthStatus {
   healthy: boolean
   message: string
@@ -7,6 +9,7 @@ export interface HealthStatus {
 }
 
 const READINESS_TIMEOUT_MS = 2000
+const log = createChildLogger('health')
 
 function getAlertmanagerBaseUrl(): string | null {
   const baseUrl = process.env.ALERTMANAGER_BASE_URL
@@ -29,6 +32,8 @@ async function checkAlertmanagerReachability(
 ): Promise<{ reachable: boolean; latencyMs?: number; error?: string }> {
   const startTime = Date.now()
   const statusUrl = `${baseUrl}/api/v2/status`
+
+  log.debug({ url: statusUrl }, 'alertmanager check started')
 
   try {
     const controller = new AbortController()
@@ -90,12 +95,16 @@ export async function checkReadiness(
   const baseUrl = getAlertmanagerBaseUrl()
 
   if (!baseUrl) {
+    log.debug({ configValid: false }, 'config validation failed')
+
     return {
       healthy: false,
       message: 'Missing or invalid ALERTMANAGER_BASE_URL',
       configValid: false,
     }
   }
+
+  log.debug({ configValid: true }, 'config validation passed')
 
   const configStatus: HealthStatus = {
     healthy: true,
@@ -106,20 +115,41 @@ export async function checkReadiness(
   const alertmanagerCheck = await checkAlertmanagerReachability(baseUrl, signal)
 
   if (!alertmanagerCheck.reachable) {
-    return {
+    const status: HealthStatus = {
       ...configStatus,
       healthy: false,
       message: `Alertmanager unreachable: ${alertmanagerCheck.error || 'Unknown error'}`,
       alertmanagerReachable: false,
       alertmanagerLatencyMs: alertmanagerCheck.latencyMs,
     }
+
+    log.warn(
+      {
+        healthy: status.healthy,
+        reason: alertmanagerCheck.error || 'Unknown error',
+        latencyMs: alertmanagerCheck.latencyMs,
+      },
+      'readiness check failed',
+    )
+
+    return status
   }
 
-  return {
+  const status: HealthStatus = {
     ...configStatus,
     healthy: true,
     message: 'Ready',
     alertmanagerReachable: true,
     alertmanagerLatencyMs: alertmanagerCheck.latencyMs,
   }
+
+  log.info(
+    {
+      healthy: status.healthy,
+      latencyMs: alertmanagerCheck.latencyMs,
+    },
+    'readiness check passed',
+  )
+
+  return status
 }
