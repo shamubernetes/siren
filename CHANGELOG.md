@@ -1,3 +1,10 @@
+## [1.3.10](https://github.com/shamubernetes/siren/compare/v1.3.9...v1.3.10) (2026-01-06)
+
+
+### Bug Fixes
+
+* **deps:** update tanstack to v1.145.7 ([#33](https://github.com/shamubernetes/siren/issues/33)) ([6e8c8b6](https://github.com/shamubernetes/siren/commit/6e8c8b64fbb41006482dcd6243c3a1465f156637))
+
 ## [1.3.9](https://github.com/shamubernetes/siren/compare/v1.3.8...v1.3.9) (2026-01-06)
 
 
