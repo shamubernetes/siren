@@ -1,3 +1,10 @@
+## [1.3.13](https://github.com/shamubernetes/siren/compare/v1.3.12...v1.3.13) (2026-01-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @tanstack/react-start to v1.145.9 ([#38](https://github.com/shamubernetes/siren/issues/38)) ([50dbb73](https://github.com/shamubernetes/siren/commit/50dbb732efc5afe186d9ee8d7cae5a44b8f14a2e))
+
 ## [1.3.12](https://github.com/shamubernetes/siren/compare/v1.3.11...v1.3.12) (2026-01-07)
 
 
