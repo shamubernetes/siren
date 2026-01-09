@@ -1,3 +1,10 @@
+## [1.3.17](https://github.com/shamubernetes/siren/compare/v1.3.16...v1.3.17) (2026-01-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @tanstack/react-devtools to v0.9.2 ([#42](https://github.com/shamubernetes/siren/issues/42)) ([18ad49e](https://github.com/shamubernetes/siren/commit/18ad49e161bac8c94c626bc697d1e4d4eb6fe15c))
+
 ## [1.3.16](https://github.com/shamubernetes/siren/compare/v1.3.15...v1.3.16) (2026-01-09)
 
 
