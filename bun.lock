@@ -155,7 +155,7 @@
 
     "@csstools/css-parser-algorithms": ["@csstools/css-parser-algorithms@3.0.5", "", { "peerDependencies": { "@csstools/css-tokenizer": "^3.0.4" } }, "sha512-DaDeUkXZKjdGhgYaHNJTV9pV7Y9B3b644jCLs9Upc3VeNGg6LWARAT6O+Q+/COo+2gg/bM5rhpMAtf70WqfBdQ=="],
 
-    "@csstools/css-syntax-patches-for-csstree": ["@csstools/css-syntax-patches-for-csstree@1.0.23", "", {}, "sha512-YEmgyklR6l/oKUltidNVYdjSmLSW88vMsKx0pmiS3r71s8ZZRpd8A0Yf0U+6p/RzElmMnPBv27hNWjDQMSZRtQ=="],
+    "@csstools/css-syntax-patches-for-csstree": ["@csstools/css-syntax-patches-for-csstree@1.0.24", "", {}, "sha512-T0pSTcd9eYEHV+llVPSkZU7URdVGu87BpSvozMwRoLJYXmLXvEHgYfv0yDsQH9+DIdLzkJCOJBABqWWnwTGPvg=="],
 
     "@csstools/css-tokenizer": ["@csstools/css-tokenizer@3.0.4", "", {}, "sha512-Vd/9EVDiu6PPJt9yAh6roZP6El1xHrdvIVGjyBsHR0RYwNHgL7FJPyIIW4fANJNG6FtyZfvlRPpFI4ZM/lubvw=="],
 
