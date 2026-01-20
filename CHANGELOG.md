@@ -1,3 +1,10 @@
+## [1.3.46](https://github.com/shamubernetes/siren/compare/v1.3.45...v1.3.46) (2026-01-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency pino to v10.2.1 ([#96](https://github.com/shamubernetes/siren/issues/96)) ([f1f943f](https://github.com/shamubernetes/siren/commit/f1f943fcb512f2a458bb95a28970b69a906e6e94))
+
 ## [1.3.45](https://github.com/shamubernetes/siren/compare/v1.3.44...v1.3.45) (2026-01-19)
 
 
