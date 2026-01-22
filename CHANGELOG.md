@@ -1,3 +1,10 @@
+## [1.3.52](https://github.com/shamubernetes/siren/compare/v1.3.51...v1.3.52) (2026-01-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency nitro to v3.0.1-alpha.2 ([#104](https://github.com/shamubernetes/siren/issues/104)) ([e326e86](https://github.com/shamubernetes/siren/commit/e326e86ea69dd4eb55372c92a00f29ed975ab931))
+
 ## [1.3.51](https://github.com/shamubernetes/siren/compare/v1.3.50...v1.3.51) (2026-01-22)
 
 
