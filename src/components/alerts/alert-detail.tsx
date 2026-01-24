@@ -3,6 +3,9 @@ import { ExternalLinkIcon } from 'lucide-react'
 import type { AlertmanagerAlert } from '@/lib/alertmanager/alertmanager-types'
 import { extractAlertExternalLinks } from '@/lib/alertmanager/alert-link-utils'
 import { AlertSeverityBadge } from '@/components/alerts/alert-severity-badge'
+import { AlertStateBadge } from '@/components/alerts/alert-state-badge'
+import { SilenceAlertButton } from '@/components/alerts/silence-alert-button'
+import { useSilenceState } from '@/components/alerts/use-silence-state'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,14 +14,16 @@ import { Separator } from '@/components/ui/separator'
 
 type AlertDetailProps = {
   alert: AlertmanagerAlert
+  onRefresh?: () => void
 }
 
-export function AlertDetail({ alert }: AlertDetailProps) {
+export function AlertDetail({ alert, onRefresh }: AlertDetailProps) {
   const alertname = alert.labels.alertname ?? 'Alert'
   const summary =
     alert.annotations.summary ?? alert.annotations.description ?? 'No summary'
 
   const links = extractAlertExternalLinks(alert)
+  const silenceState = useSilenceState(alert, onRefresh)
 
   return (
     <div className="mx-auto w-full max-w-6xl px-4 py-10">
@@ -27,11 +32,14 @@ export function AlertDetail({ alert }: AlertDetailProps) {
           <h1 className="truncate text-2xl font-semibold">{alertname}</h1>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <AlertSeverityBadge severity={alert.labels.severity} />
-            <Badge variant="secondary">{alert.status.state}</Badge>
+            <AlertStateBadge alert={alert} optimisticSilenced={silenceState.optimisticSilenced} />
             <Badge variant="outline" className="font-mono">
               {alert.fingerprint}
             </Badge>
           </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <SilenceAlertButton alert={alert} silenceState={silenceState} />
         </div>
       </header>
 
