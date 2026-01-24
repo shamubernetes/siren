@@ -1,4 +1,5 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute, useRouter } from '@tanstack/react-router'
+import { useCallback } from 'react'
 
 import { fetchAlertmanagerAlerts } from '@/lib/alertmanager/alertmanager-client'
 import { AlertDetail } from '@/components/alerts/alert-detail'
@@ -53,7 +54,12 @@ function AlertError({ error }: { error: Error }) {
 }
 
 function AlertRoute() {
+  const router = useRouter()
   const { alert, fingerprint } = Route.useLoaderData()
+
+  const handleRefresh = useCallback(() => {
+    void router.invalidate()
+  }, [router])
 
   if (!alert) {
     return (
@@ -87,7 +93,7 @@ function AlertRoute() {
           </div>
         </div>
       </div>
-      <AlertDetail alert={alert} />
+      <AlertDetail alert={alert} onRefresh={handleRefresh} />
     </div>
   )
 }

@@ -434,6 +434,7 @@ export function AlertsDashboard({
               nowMs={nowMs}
               isExpanded={expandedByGroup[group.alertname] ?? false}
               onExpandedChange={handleGroupExpandedChange}
+              onRefresh={onRefresh}
             />
           ))
         )}
