@@ -22,3 +22,22 @@ export interface AlertmanagerAlert {
   status: AlertmanagerAlertStatus
   updatedAt?: string
 }
+
+export interface SilenceMatcher {
+  name: string
+  value: string
+  isRegex: boolean
+  isEqual: boolean
+}
+
+export interface CreateSilencePayload {
+  matchers: Array<SilenceMatcher>
+  startsAt: string
+  endsAt: string
+  createdBy: string
+  comment: string
+}
+
+export interface SilenceResponse {
+  silenceID: string
+}
