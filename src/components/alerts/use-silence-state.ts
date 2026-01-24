@@ -24,7 +24,9 @@ export function useSilenceState(
   onRefresh?: () => void,
 ): UseSilenceStateResult {
   const [isDeleting, setIsDeleting] = useState(false)
-  const [optimisticSilenced, setOptimisticSilenced] = useState<boolean | null>(null)
+  const [optimisticSilenced, setOptimisticSilenced] = useState<boolean | null>(
+    null,
+  )
 
   const silenceIds = alert.status.silencedBy ?? []
   const serverSilenced = silenceIds.length > 0

@@ -124,74 +124,74 @@ export const createAlertmanagerSilence = createServerFn({
 })
   .inputValidator((data: CreateSilencePayload) => data)
   .handler(async ({ data }) => {
-  const baseUrl = getAlertmanagerBaseUrl()
-  const silenceUrl = `${baseUrl}/api/v2/silences`
-  const startTime = Date.now()
+    const baseUrl = getAlertmanagerBaseUrl()
+    const silenceUrl = `${baseUrl}/api/v2/silences`
+    const startTime = Date.now()
 
-  log.debug({ url: silenceUrl, matchers: data.matchers }, 'creating silence')
+    log.debug({ url: silenceUrl, matchers: data.matchers }, 'creating silence')
 
-  try {
-    const response = await fetch(silenceUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
+    try {
+      const response = await fetch(silenceUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
 
-    const latencyMs = Date.now() - startTime
+      const latencyMs = Date.now() - startTime
 
-    if (!response.ok) {
-      let bodyText = ''
+      if (!response.ok) {
+        let bodyText = ''
 
-      try {
-        bodyText = await response.text()
-      } catch {
-        bodyText = ''
+        try {
+          bodyText = await response.text()
+        } catch {
+          bodyText = ''
+        }
+
+        const trimmedBody = bodyText.trim()
+        const suffix = trimmedBody ? `: ${trimmedBody.slice(0, 500)}` : ''
+
+        const error = new Error(
+          `Failed to create silence (${response.status} ${response.statusText})${suffix}`,
+        )
+
+        log.error(
+          {
+            error: error.message,
+            statusCode: response.status,
+            latencyMs,
+          },
+          'failed to create silence',
+        )
+
+        throw error
       }
 
-      const trimmedBody = bodyText.trim()
-      const suffix = trimmedBody ? `: ${trimmedBody.slice(0, 500)}` : ''
+      const result = (await response.json()) as SilenceResponse
 
-      const error = new Error(
-        `Failed to create silence (${response.status} ${response.statusText})${suffix}`,
-      )
+      log.info({ silenceID: result.silenceID, latencyMs }, 'created silence')
 
-      log.error(
-        {
-          error: error.message,
-          statusCode: response.status,
-          latencyMs,
-        },
-        'failed to create silence',
-      )
+      return result
+    } catch (error) {
+      const latencyMs = Date.now() - startTime
+
+      if (error instanceof Error && error.name !== 'TypeError') {
+        log.error(
+          {
+            error: error.message,
+            statusCode: null,
+            latencyMs,
+          },
+          'failed to create silence',
+        )
+      }
 
       throw error
     }
-
-    const result = (await response.json()) as SilenceResponse
-
-    log.info({ silenceID: result.silenceID, latencyMs }, 'created silence')
-
-    return result
-  } catch (error) {
-    const latencyMs = Date.now() - startTime
-
-    if (error instanceof Error && error.name !== 'TypeError') {
-      log.error(
-        {
-          error: error.message,
-          statusCode: null,
-          latencyMs,
-        },
-        'failed to create silence',
-      )
-    }
-
-    throw error
-  }
-})
+  })
 
 export const deleteAlertmanagerSilence = createServerFn({
   method: 'POST',
@@ -202,7 +202,10 @@ export const deleteAlertmanagerSilence = createServerFn({
     const silenceUrl = `${baseUrl}/api/v2/silence/${encodeURIComponent(data.silenceId)}`
     const startTime = Date.now()
 
-    log.debug({ url: silenceUrl, silenceId: data.silenceId }, 'deleting silence')
+    log.debug(
+      { url: silenceUrl, silenceId: data.silenceId },
+      'deleting silence',
+    )
 
     try {
       const response = await fetch(silenceUrl, {

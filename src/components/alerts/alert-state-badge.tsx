@@ -8,15 +8,19 @@ type AlertStateBadgeProps = {
   optimisticSilenced?: boolean | null
 }
 
-export function AlertStateBadge({ alert, optimisticSilenced }: AlertStateBadgeProps) {
+export function AlertStateBadge({
+  alert,
+  optimisticSilenced,
+}: AlertStateBadgeProps) {
   const serverKind = getAlertKind(alert)
 
   // Apply optimistic override for silenced state
-  const kind = optimisticSilenced === true
-    ? 'silenced'
-    : optimisticSilenced === false && serverKind === 'silenced'
-      ? 'firing'
-      : serverKind
+  const kind =
+    optimisticSilenced === true
+      ? 'silenced'
+      : optimisticSilenced === false && serverKind === 'silenced'
+        ? 'firing'
+        : serverKind
 
   const label =
     kind === 'firing'

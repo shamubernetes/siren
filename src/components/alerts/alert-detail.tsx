@@ -32,7 +32,10 @@ export function AlertDetail({ alert, onRefresh }: AlertDetailProps) {
           <h1 className="truncate text-2xl font-semibold">{alertname}</h1>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <AlertSeverityBadge severity={alert.labels.severity} />
-            <AlertStateBadge alert={alert} optimisticSilenced={silenceState.optimisticSilenced} />
+            <AlertStateBadge
+              alert={alert}
+              optimisticSilenced={silenceState.optimisticSilenced}
+            />
             <Badge variant="outline" className="font-mono">
               {alert.fingerprint}
             </Badge>

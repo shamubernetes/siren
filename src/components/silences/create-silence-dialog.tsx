@@ -123,7 +123,15 @@ export function CreateSilenceDialog({
         setIsSubmitting(false)
       }
     },
-    [comment, createdBy, customEndTime, durationKey, matchers, onOpenChange, onSuccess],
+    [
+      comment,
+      createdBy,
+      customEndTime,
+      durationKey,
+      matchers,
+      onOpenChange,
+      onSuccess,
+    ],
   )
 
   return (

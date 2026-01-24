@@ -9,7 +9,10 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { CreateSilenceDialog } from '@/components/silences/create-silence-dialog'
-import { useSilenceState, type UseSilenceStateResult } from './use-silence-state'
+import {
+  useSilenceState,
+  type UseSilenceStateResult,
+} from './use-silence-state'
 
 type SilenceAlertButtonProps = {
   alert: AlertmanagerAlert
@@ -18,7 +21,11 @@ type SilenceAlertButtonProps = {
   silenceState?: UseSilenceStateResult
 }
 
-export function SilenceAlertButton({ alert, onRefresh, silenceState }: SilenceAlertButtonProps) {
+export function SilenceAlertButton({
+  alert,
+  onRefresh,
+  silenceState,
+}: SilenceAlertButtonProps) {
   const [open, setOpen] = useState(false)
 
   // Use provided state or create internal state

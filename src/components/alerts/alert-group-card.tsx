@@ -92,7 +92,10 @@ export function AlertGroupCard({
                   <Badge variant="secondary">+{group.alerts.length - 1}</Badge>
                 ) : null}
                 <AlertSeverityBadge severity={previewAlert.labels.severity} />
-                <AlertStateBadge alert={previewAlert} optimisticSilenced={previewSilenceState.optimisticSilenced} />
+                <AlertStateBadge
+                  alert={previewAlert}
+                  optimisticSilenced={previewSilenceState.optimisticSilenced}
+                />
                 <span className="text-xs text-muted-foreground">
                   {formatAgeShort(previewAlert.startsAt, nowMs)}
                 </span>
@@ -103,7 +106,10 @@ export function AlertGroupCard({
           <div className="flex items-center gap-2">
             {!isExpanded && previewAlert ? (
               <div className="hidden items-center gap-2 sm:flex">
-                <SilenceAlertButton alert={previewAlert} silenceState={previewSilenceState} />
+                <SilenceAlertButton
+                  alert={previewAlert}
+                  silenceState={previewSilenceState}
+                />
                 <CopyAlertLinkButton fingerprint={previewAlert.fingerprint} />
                 <Link
                   to="/a/$fingerprint"
@@ -146,12 +152,18 @@ export function AlertGroupCard({
               <Badge variant="secondary">+{group.alerts.length - 1}</Badge>
             ) : null}
             <AlertSeverityBadge severity={previewAlert.labels.severity} />
-            <AlertStateBadge alert={previewAlert} optimisticSilenced={previewSilenceState.optimisticSilenced} />
+            <AlertStateBadge
+              alert={previewAlert}
+              optimisticSilenced={previewSilenceState.optimisticSilenced}
+            />
             <span className="text-muted-foreground">
               {formatAgeShort(previewAlert.startsAt, nowMs)}
             </span>
             <div className="ml-auto flex items-center gap-2">
-              <SilenceAlertButton alert={previewAlert} silenceState={previewSilenceState} />
+              <SilenceAlertButton
+                alert={previewAlert}
+                silenceState={previewSilenceState}
+              />
               <CopyAlertLinkButton fingerprint={previewAlert.fingerprint} />
               <Link
                 to="/a/$fingerprint"
@@ -232,7 +244,10 @@ function AlertRow({ alert, nowMs, onRefresh }: AlertRowProps) {
         <AlertSeverityBadge severity={alert.labels.severity} />
       </TableCell>
       <TableCell>
-        <AlertStateBadge alert={alert} optimisticSilenced={silenceState.optimisticSilenced} />
+        <AlertStateBadge
+          alert={alert}
+          optimisticSilenced={silenceState.optimisticSilenced}
+        />
       </TableCell>
       <TableCell className="text-sm text-muted-foreground">
         {formatAgeShort(alert.startsAt, nowMs)}
@@ -261,7 +276,11 @@ type MobileAlertInstanceProps = {
   onRefresh: () => void
 }
 
-function MobileAlertInstance({ alert, nowMs, onRefresh }: MobileAlertInstanceProps) {
+function MobileAlertInstance({
+  alert,
+  nowMs,
+  onRefresh,
+}: MobileAlertInstanceProps) {
   const silenceState = useSilenceState(alert, onRefresh)
 
   return (
@@ -282,7 +301,10 @@ function MobileAlertInstance({ alert, nowMs, onRefresh }: MobileAlertInstancePro
           </div>
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground">Status:</span>
-            <AlertStateBadge alert={alert} optimisticSilenced={silenceState.optimisticSilenced} />
+            <AlertStateBadge
+              alert={alert}
+              optimisticSilenced={silenceState.optimisticSilenced}
+            />
           </div>
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground">Age:</span>
