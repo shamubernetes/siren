@@ -1,3 +1,16 @@
+# [1.4.0](https://github.com/shamubernetes/siren/compare/v1.3.62...v1.4.0) (2026-01-24)
+
+
+### Features
+
+* **alertmanager:** Add silence API functions ([cbd24ed](https://github.com/shamubernetes/siren/commit/cbd24ed0d18c43a9117ddedb080f9fcf84a4ceac))
+* **alerts:** Add SilenceAlertButton component ([cdc2686](https://github.com/shamubernetes/siren/commit/cdc2686c9bf445403d00a5cc036fe371bfdb2a78))
+* **alerts:** Add useSilenceState hook ([c52055b](https://github.com/shamubernetes/siren/commit/c52055be5e7d2f654d74c252fbce571edccf9ca9))
+* **alerts:** Integrate silence in AlertDetail ([9fca38f](https://github.com/shamubernetes/siren/commit/9fca38f7001a963345349b91284cd2713c731240))
+* **alerts:** Integrate silence in AlertGroupCard ([d06cd58](https://github.com/shamubernetes/siren/commit/d06cd5845db21f5bc9a717a2f2e2b814fdac4ae2))
+* **silences:** Add utils and types ([442823f](https://github.com/shamubernetes/siren/commit/442823fb2e371a673f9e7f54f468a947e1bfeaaa))
+* **silences:** Implement CreateSilenceDialog ([623e530](https://github.com/shamubernetes/siren/commit/623e530fbfea5968723f515c622c2d01e77c7c5d))
+
 ## [1.3.62](https://github.com/shamubernetes/siren/compare/v1.3.61...v1.3.62) (2026-01-24)
 
 
