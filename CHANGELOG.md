@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/shamubernetes/siren/compare/v1.4.3...v1.4.4) (2026-01-27)
+
+
+### Bug Fixes
+
+* **deps:** update react to v19.2.4 ([#128](https://github.com/shamubernetes/siren/issues/128)) ([451d415](https://github.com/shamubernetes/siren/commit/451d4156e477ad967c16bbaf95d865a5239ec789))
+
 ## [1.4.3](https://github.com/shamubernetes/siren/compare/v1.4.2...v1.4.3) (2026-01-24)
 
 
