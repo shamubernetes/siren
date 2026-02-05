@@ -1,3 +1,10 @@
+## [1.4.8](https://github.com/shamubernetes/siren/compare/v1.4.7...v1.4.8) (2026-02-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency shadcn to v3.8.3 ([#155](https://github.com/shamubernetes/siren/issues/155)) ([bb77c18](https://github.com/shamubernetes/siren/commit/bb77c18641cf4d1263ef41478ed8db67f943ebbe))
+
 ## [1.4.7](https://github.com/shamubernetes/siren/compare/v1.4.6...v1.4.7) (2026-02-03)
 
 
