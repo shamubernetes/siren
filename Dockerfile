@@ -19,7 +19,7 @@ RUN bun run build
 RUN test -d .output || (echo "Build output directory .output not found" && exit 1)
 
 # Runtime stage
-FROM oven/bun:1-slim@sha256:68fc2eac7f5dcfc2f69a81d1db02786ab08772eda2e4404eae785c038f8d2e41 AS runner
+FROM oven/bun:1-slim@sha256:8ca06c7812d9050ccc4b80799685f395d6a0d051d3b7207dfd120e2b437b1ec9 AS runner
 
 WORKDIR /app
 
