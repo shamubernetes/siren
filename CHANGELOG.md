@@ -1,3 +1,10 @@
+## [1.4.12](https://github.com/shamubernetes/siren/compare/v1.4.11...v1.4.12) (2026-02-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency vite-tsconfig-paths to v6.1.1 ([#188](https://github.com/shamubernetes/siren/issues/188)) ([4cf4edb](https://github.com/shamubernetes/siren/commit/4cf4edb0c2388838ea173551d2b3fd3faaa09c9f))
+
 ## [1.4.11](https://github.com/shamubernetes/siren/compare/v1.4.10...v1.4.11) (2026-02-10)
 
 
