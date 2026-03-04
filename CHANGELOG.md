@@ -1,3 +1,10 @@
+## [1.4.26](https://github.com/shamubernetes/siren/compare/v1.4.25...v1.4.26) (2026-03-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency lucide-react to v0.577.0 ([#246](https://github.com/shamubernetes/siren/issues/246)) ([345642b](https://github.com/shamubernetes/siren/commit/345642b0a6b9b7abbe1fde9ec4735240f7095d19))
+
 ## [1.4.25](https://github.com/shamubernetes/siren/compare/v1.4.24...v1.4.25) (2026-03-02)
 
 
