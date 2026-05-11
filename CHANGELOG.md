@@ -1,3 +1,10 @@
+## [1.4.36](https://github.com/shamubernetes/siren/compare/v1.4.35...v1.4.36) (2026-05-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tailwind-merge to v3.6.0 ([#418](https://github.com/shamubernetes/siren/issues/418)) ([3201e82](https://github.com/shamubernetes/siren/commit/3201e827a350c9aefbd54b54ae09e1dac48772c3))
+
 ## [1.4.35](https://github.com/shamubernetes/siren/compare/v1.4.34...v1.4.35) (2026-05-09)
 
 
