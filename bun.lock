@@ -1639,9 +1639,9 @@
 
     "tinyrainbow": ["tinyrainbow@3.1.0", "", {}, "sha512-Bf+ILmBgretUrdJxzXM0SgXLZ3XfiaUuOj/IKQHuTXip+05Xn+uyEYdVg0kYDipTBcLrCVyUzAPz7QmArb0mmw=="],
 
-    "tldts": ["tldts@7.0.30", "", { "dependencies": { "tldts-core": "^7.0.30" }, "bin": { "tldts": "bin/cli.js" } }, "sha512-ELrFxuqsDdHUwoh0XxDbxuLD3Wnz49Z57IFvTtvWy1hJdcMZjXLIuonjilCiWHlT2GbE4Wlv1wKVTzDFnXH1aw=="],
+    "tldts": ["tldts@7.0.31", "", { "dependencies": { "tldts-core": "^7.0.31" }, "bin": { "tldts": "bin/cli.js" } }, "sha512-bBexVSujxvWzgbBKAXbj+xpe3nBfhGajXEdQ2DGSwZ7+lNlS4yjq7zuc1BmqBXanbf8T4fEBGdbUqbhp/2B3bw=="],
 
-    "tldts-core": ["tldts-core@7.0.30", "", {}, "sha512-uiHN8PIB1VmWyS98eZYja4xzlYqeFZVjb4OuYlJQnZAuJhMw4PbKQOKgHKhBdJR3FE/t5mUQ1Kd80++B+qhD1Q=="],
+    "tldts-core": ["tldts-core@7.0.31", "", {}, "sha512-wXjKe2IhLUTHnWRmIa7pe+mdsO8IICf+sXb4+zW/8DuI2/pgDiVPqi4DagqzF6/rL/vGQw48k232Fua0Gu81Ug=="],
 
     "to-regex-range": ["to-regex-range@5.0.1", "", { "dependencies": { "is-number": "^7.0.0" } }, "sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ=="],
 
