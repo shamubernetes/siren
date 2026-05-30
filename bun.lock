@@ -1637,9 +1637,9 @@
 
     "tinyrainbow": ["tinyrainbow@3.1.0", "", {}, "sha512-Bf+ILmBgretUrdJxzXM0SgXLZ3XfiaUuOj/IKQHuTXip+05Xn+uyEYdVg0kYDipTBcLrCVyUzAPz7QmArb0mmw=="],
 
-    "tldts": ["tldts@7.4.0", "", { "dependencies": { "tldts-core": "^7.4.0" }, "bin": { "tldts": "bin/cli.js" } }, "sha512-yHBe+zVfzNZ3QfTPW/Z6KK1G2t340gFjMHqI/4KKSt/abzYydzuCnpqdaF5gCCABby+9Yfbj59oR5F2Fd5CBzg=="],
+    "tldts": ["tldts@7.4.2", "", { "dependencies": { "tldts-core": "^7.4.2" }, "bin": { "tldts": "bin/cli.js" } }, "sha512-kCwffuaH8ntKtygnWe1b4BJKWiCUH30n5KfoTr6IchcXOwR7chAOFJxFrH3vjANafUYrIA4a7SDL+nn7SiR4Sw=="],
 
-    "tldts-core": ["tldts-core@7.4.1", "", {}, "sha512-sc2nGvGbixlJRHwTh/qQdPXTxJU1UDJboGPQm4d/01YUJ9r/u6aeIulQvEaxUlvKDN7hb1qCLjax+jhVAPLa/g=="],
+    "tldts-core": ["tldts-core@7.4.2", "", {}, "sha512-nwEyF4vl4RSJjwSjBUmOSxc3BFPoIFdlRthJ6e+5v9P3bHNsoD06UjuqMUspqp7vsEZ1beaHi1km+optiE17yA=="],
 
     "to-regex-range": ["to-regex-range@5.0.1", "", { "dependencies": { "is-number": "^7.0.0" } }, "sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ=="],
 
