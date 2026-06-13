@@ -1,3 +1,10 @@
+## [1.4.39](https://github.com/shamubernetes/siren/compare/v1.4.38...v1.4.39) (2026-06-13)
+
+
+### Bug Fixes
+
+* **deps:** update tailwind to v4.3.1 ([#477](https://github.com/shamubernetes/siren/issues/477)) ([0eda57f](https://github.com/shamubernetes/siren/commit/0eda57ff125fa3ab6240e89f69c92999d725ff8e))
+
 ## [1.4.38](https://github.com/shamubernetes/siren/compare/v1.4.37...v1.4.38) (2026-06-02)
 
 
