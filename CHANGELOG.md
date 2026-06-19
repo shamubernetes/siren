@@ -1,3 +1,10 @@
+## [1.4.40](https://github.com/shamubernetes/siren/compare/v1.4.39...v1.4.40) (2026-06-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @base-ui/react to v1.6.0 ([#482](https://github.com/shamubernetes/siren/issues/482)) ([c412cce](https://github.com/shamubernetes/siren/commit/c412cce039e56343ebe163a1606015f9f248569b))
+
 ## [1.4.39](https://github.com/shamubernetes/siren/compare/v1.4.38...v1.4.39) (2026-06-13)
 
 
